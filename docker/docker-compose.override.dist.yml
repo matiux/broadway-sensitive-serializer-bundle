@@ -1,0 +1,15 @@
+version: '3.8'
+
+secrets:
+  id_rsa:
+    file:
+  id_rsa.pub:
+    file:
+  known_hosts:
+    file:
+
+services:
+
+  php_broadway_sensitive_serializer_bundle:
+    environment:
+      - AGGREGATE_MASTER_KEY="SS3kr3tK31"

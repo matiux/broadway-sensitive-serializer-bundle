@@ -1,0 +1,35 @@
+version: '3.8'
+
+networks:
+  sensitive_serializer_bundle_network:
+    name: sensitive_serializer_bundle_network
+    driver: bridge
+
+services:
+
+  php_broadway_sensitive_serializer_bundle:
+    build: php
+    hostname: sensitive_serializer_bundle
+    volumes:
+      - ../:/var/www/app:delegated
+      - ./data/shell_history:/home/utente/shell_history
+    networks:
+      - sensitive_serializer_bundle_network
+    environment:
+      - HISTFILE=/home/utente/shell_history/.x_history
+    secrets:
+      - source: id_rsa
+        target: /home/utente/.ssh/id_rsa
+      - source: id_rsa.pub
+        target: /home/utente/.ssh/id_rsa.pub
+      - source: known_hosts
+        target: /home/utente/.ssh/known_hosts
+
+  nodejs:
+    build: nodejs
+    working_dir: /var/www/app
+    #command: "commitlint -e --from=HEAD"
+    volumes:
+      - ../:/var/www/app
+    networks:
+      - sensitive_serializer_bundle_network

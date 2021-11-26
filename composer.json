@@ -1,0 +1,52 @@
+{
+  "name": "matiux/broadway-sensitive-serializer-bundle",
+  "description": "Bundle for serializer implementation with support for data sensitization",
+  "type": "symfony-bundle",
+  "license": "MIT",
+  "keywords": [
+    "cqrs",
+    "event sourcing",
+    "domain-driven design",
+    "ddd",
+    "sensitization",
+    "serializer",
+    "gdpr"
+  ],
+  "authors": [
+    {
+      "name": "Matteo Galacci",
+      "email": "m.galacci@gmail.com"
+    }
+  ],
+  "require": {
+    "php": "^7.4|^8",
+    "broadway/broadway": "^2.4",
+    "symfony/polyfill-php80": "^1.0"
+  },
+  "require-dev": {
+    "friendsofphp/php-cs-fixer": "^3.1",
+    "mockery/mockery": "^1.4",
+    "phpunit/phpunit": "^9.5",
+    "psalm/plugin-mockery": "^0.9.0",
+    "psalm/plugin-phpunit": "^0.16.1",
+    "roave/security-advisories": "dev-latest",
+    "symfony/var-dumper": "^5.3",
+    "vimeo/psalm": "^4.10"
+  },
+  "suggest": {
+    "broadway/event-store-dbal": "Event store implementation using doctrine/dbal"
+  },
+  "autoload": {
+    "psr-4": {
+      "Matiux\\Broadway\\Bundle\\SensitiveSerializerBundle\\": "src/SensitiveSerializerBundle/"
+    }
+  },
+  "autoload-dev": {
+    "psr-4": {
+    }
+  },
+  "config": {
+    "optimize-autoloader": true,
+    "sort-packages": true
+  }
+}
