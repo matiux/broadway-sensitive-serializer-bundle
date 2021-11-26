@@ -1,0 +1,8 @@
+services:
+  broadway_sensitive_serializer.aggregate_key_manager:
+    class: Matiux\Broadway\SensitiveSerializer\DataManager\Domain\Service\AggregateKeyManager
+    arguments:
+      $keyGenerator: 'Matiux\Broadway\SensitiveSerializer\DataManager\Domain\Service\KeyGenerator'
+      $aggregateKeys: '@broadway_sensitive_serializer.aggregate_keys'
+      $sensitiveDataManager: 'Matiux\Broadway\SensitiveSerializer\DataManager\Domain\Service\SensitiveDataManager'
+      $aggregateMasterKey: '%matiux.broadway.sensitive_serializer.aggregate_master_key%'

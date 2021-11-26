@@ -1,0 +1,6 @@
+services:
+  broadway_sensitive_serializer.key_generator.open_ssl:
+    class: Matiux\Broadway\SensitiveSerializer\DataManager\Infrastructure\Domain\Service\OpenSSLKeyGenerator
+
+#  broadway_sensitive_serializer.key_generator:
+#    alias: broadway_sensitive_serializer.key_generator.open_ssl
