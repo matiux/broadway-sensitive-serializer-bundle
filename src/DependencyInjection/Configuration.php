@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Matiux\Broadway\SensitiveSerializer\Bundle\SensitiveSerializerBundle\DependencyInjection;
 
+use Matiux\Broadway\SensitiveSerializer\DataManager\Domain\Aggregate\AggregateKeys;
 use Symfony\Component\Config\Definition\ArrayNode;
 use Symfony\Component\Config\Definition\Builder\ArrayNodeDefinition;
 use Symfony\Component\Config\Definition\Builder\TreeBuilder;
@@ -23,7 +24,7 @@ class Configuration implements ConfigurationInterface
             $rootNode = $treeBuilder->root('broadway_sensitive_serializer');
         }
 
-//        $this->configureStrategy($rootNode);
+        $this->configureStrategy($rootNode);
         $this->configureKeyGenerator($rootNode);
         $this->configureDataManager($rootNode);
         $this->configureAggregateKeys($rootNode);
@@ -36,8 +37,31 @@ class Configuration implements ConfigurationInterface
     {
         $rootNode->children()
             ->arrayNode('strategy')
-                ->isRequired()
-                ->info('Strategy to sensitize events payload')
+                ->isRequired()->info('Strategy configuration to sensitize events payload')
+                ->children()
+                    ->scalarNode('name')->isRequired()->info('Strategy name to sensitize events payload. Use partial or whole.')->end()
+                    ->arrayNode('parameters')->info('Configuration for specific strategy.')->end()
+                ->end()
+            ->end()
+        ->end();
+
+        $this->expandName($rootNode->find('strategy'));
+        $this->expandParameters($rootNode->find('strategy'));
+
+        $this->addWholeStrategyParameters($rootNode);
+    }
+
+    private function addWholeStrategyParameters(ArrayNodeDefinition $node): void
+    {
+        $node->find('strategy.parameters')
+            ->children()
+                ->arrayNode('whole')
+                    ->info('Strategy to sensitize all keys in payload but the id')
+                    ->children()
+                        ->booleanNode('aggregate_key_auto_creation')->defaultTrue()->info('Choose whether to use auto creation for the aggregate_key. Default true')->end()
+                        ->arrayNode('events')->prototype('scalar')->info('List of events to sensitize')->isRequired()->end()
+                    ->end()
+                ->end()
             ->end();
     }
 
@@ -45,10 +69,9 @@ class Configuration implements ConfigurationInterface
     {
         $rootNode->children()
             ->scalarNode('key_generator')
-                ->info('Key generator strategy to creare Aggregate keys')
-                ->isRequired()
-                ->defaultValue('open-ssl')
-            ->end();
+                ->info('Key generator strategy to creare Aggregate keys')->isRequired()->defaultValue('open-ssl')->end()
+            ->end()
+        ->end();
     }
 
     private function configureDataManager(ArrayNodeDefinition $rootNode): void
@@ -58,15 +81,12 @@ class Configuration implements ConfigurationInterface
                 ->info('Concrete class to handle data encryption and decryption')
                 ->isRequired()
                 ->children()
-                    ->scalarNode('name')
-                        ->defaultValue('AES256')
-                        ->info('Data manager strategy name')
-                        ->isRequired()
-                    ->end()
-                    ->arrayNode('parameters')
-                        ->info('Configuration for specific strategy data manager')
-                    ->end()
-            ->end();
+                    ->scalarNode('name')->defaultValue('AES256')->info('Data manager strategy name')->isRequired()->end()
+                    ->arrayNode('parameters')->info('Configuration for specific strategy data manager')->end()
+                ->end()
+            ->end()
+        ->end();
+
 
         $this->expandName($rootNode->find('data_manager'));
         $this->expandParameters($rootNode->find('data_manager'));
@@ -78,9 +98,9 @@ class Configuration implements ConfigurationInterface
     {
         $rootNode->children()
             ->scalarNode('aggregate_keys')
-                ->info('a service definition id implementing Matiux\Broadway\SensitiveSerializer\DataManager\Domain\Aggregate\AggregateKeys')
-                ->isRequired()
-            ->end();
+                ->info(sprintf('A service definition id implementing %s',AggregateKeys::class))->isRequired()->end()
+            ->end()
+        ->end();
     }
 
     private function expandName(ArrayNodeDefinition $node): void
@@ -128,28 +148,18 @@ class Configuration implements ConfigurationInterface
                 ->arrayNode('AES256')
                     ->info('Protocol strategy to handle data encryption and decryption')
                     ->children()
-                        ->scalarNode('key')
-                            ->info('Encryption key to sensitize data. If null you will need to pass the key at runtime')
-                            ->isRequired()
-                        ->end()
-                        ->scalarNode('iv')
-                            ->info('Initialization vector. If null it will be generated internally and iv_encoding must be set to true')
-                        ->end()
-                        ->scalarNode('iv_encoding')
-                            ->info('Encrypt the iv and is appends to encrypted value. It makes sense to set it to true if the iv option is set to null')
-                        ->end()
+                        ->scalarNode('key')->info('Encryption key to sensitize data. If null you will need to pass the key at runtime')->isRequired()->end()
+                        ->scalarNode('iv')->info('Initialization vector. If null it will be generated internally and iv_encoding must be set to true')->end()
+                        ->scalarNode('iv_encoding')->info('Encrypt the iv and is appends to encrypted value. It makes sense to set it to true if the iv option is set to null')->end()
                     ->end()
                 ->end()
-            ->end()
-        ;
+            ->end();
     }
 
     private function setAggregateMasterKey(ArrayNodeDefinition $node): void
     {
         $node->children()
-            ->scalarNode('aggregate_master_key')
-                ->isRequired()
-                ->info('Master key to encrypt the keys of aggregates. Get it from an external service or environment variable')
-            ->end();
+            ->scalarNode('aggregate_master_key')->isRequired()->info('Master key to encrypt the keys of aggregates. Get it from an external service or environment variable')->end()
+        ->end();
     }
 }

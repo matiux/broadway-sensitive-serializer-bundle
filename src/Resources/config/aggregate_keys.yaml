@@ -1,16 +1,3 @@
 services:
-#  broadway_sensitive_serializer.aggregate_keys.invalid:
-#    class: Matiux\Broadway\SensitiveSerializer\Bundle\SensitiveSerializerBundle\DependencyInjection\Utility\InvalidAggregateKeys
-#
-#  Matiux\Broadway\SensitiveSerializer\DataManager\Domain\Aggregate\AggregateKeys:
-#    alias: broadway_sensitive_serializer.aggregate_keys.invalid
   broadway_sensitive_serializer.aggregate_keys.in_memory:
     class: Matiux\Broadway\SensitiveSerializer\DataManager\Infrastructure\Domain\Aggregate\InMemoryAggregateKeys
-
-
-
-#  broadway_sensitive_serializer.aggregate_key_manager:
-#    class: Matiux\Broadway\SensitiveSerializer\DataManager\Domain\Service\AggregateKeyManager
-#    arguments:
-#      $keyGenerator: '@Matiux\Broadway\SensitiveSerializer\DataManager\Domain\Service\KeyGenerator'
-#      $aggregateKeys: '@Matiux\Broadway\SensitiveSerializer\DataManager\Domain\Aggregate\AggregateKeys'
