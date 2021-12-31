@@ -104,6 +104,16 @@ class BroadwaySensitiveSerializerExtension extends ConfigurableExtension
         );
 
         $container->setParameter(
+            'matiux.broadway.sensitive_serializer.strategy.excluded_keys',
+            $config['strategy']['parameters'][RegisterWholeStrategyCompilerPass::STRATEGY_NAME]['excluded_keys']
+        );
+
+        $container->setParameter(
+            'matiux.broadway.sensitive_serializer.strategy.excluded_id_key',
+            $config['strategy']['parameters'][RegisterWholeStrategyCompilerPass::STRATEGY_NAME]['excluded_id_key']
+        );
+        
+        $container->setParameter(
             'matiux.broadway.sensitive_serializer.strategy.whole.events',
             $config['strategy']['parameters'][RegisterWholeStrategyCompilerPass::STRATEGY_NAME]['events']
         );

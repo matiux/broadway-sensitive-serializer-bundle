@@ -39,8 +39,14 @@ class Configuration implements ConfigurationInterface
             ->arrayNode('strategy')
                 ->isRequired()->info('Strategy configuration to sensitize events payload')
                 ->children()
-                    ->scalarNode('name')->isRequired()->info('Strategy name to sensitize events payload. Use partial or whole.')->end()
-                    ->arrayNode('parameters')->info('Configuration for specific strategy.')->end()
+                    ->enumNode('name')
+                    ->values([RegisterWholeStrategyCompilerPass::STRATEGY_NAME])
+                    ->isRequired()
+                    ->info('Strategy name to sensitize events payload. Use partial or whole.')
+                ->end()
+                ->arrayNode('parameters')
+                    ->info('Configuration for specific strategy.')
+                ->end()
                 ->end()
             ->end()
         ->end();
@@ -53,23 +59,44 @@ class Configuration implements ConfigurationInterface
 
     private function addWholeStrategyParameters(ArrayNodeDefinition $node): void
     {
-        $node->find('strategy.parameters')
-            ->children()
-                ->arrayNode('whole')
-                    ->info('Strategy to sensitize all keys in payload but the id')
-                    ->children()
-                        ->booleanNode('aggregate_key_auto_creation')->defaultTrue()->info('Choose whether to use auto creation for the aggregate_key. Default true')->end()
-                        ->arrayNode('events')->prototype('scalar')->info('List of events to sensitize')->isRequired()->end()
+        /** @var ArrayNodeDefinition $strategyParameterNode */
+        $strategyParameterNode = $node->find('strategy.parameters');
+        
+        $strategyParameterNode->children()
+            ->arrayNode('whole')
+                ->info('Strategy to sensitize all keys in payload but the id')
+                ->children()
+                    ->booleanNode('aggregate_key_auto_creation')
+                        ->defaultTrue()
+                        ->info('Choose whether to use auto creation for the aggregate_key. Default true')
+                    ->end()
+                    ->scalarNode('excluded_id_key')
+                        ->defaultValue('id')
+                        ->info('The key to the id to be excluded from sensitization. Default `id`')
+                    ->end()
+                    ->arrayNode('excluded_keys')
+                        ->scalarPrototype()->end()
+                        ->defaultValue(['occurred_at'])
+                        ->info('Keys that you want to exclude from sensitization. Default `[occurred_at]`')
+                    ->end()
+                    ->arrayNode('events')
+                        ->scalarPrototype()->end()
+                        ->info('List of events to sensitize')
+                        ->isRequired()
                     ->end()
                 ->end()
-            ->end();
+            ->end()
+        ->end();
     }
 
     private function configureKeyGenerator(ArrayNodeDefinition $rootNode): void
     {
         $rootNode->children()
-            ->scalarNode('key_generator')
-                ->info('Key generator strategy to creare Aggregate keys')->isRequired()->defaultValue('open-ssl')->end()
+            ->enumNode('key_generator')
+                ->values(['open-ssl'])
+                ->info('Key generator strategy to creare Aggregate keys')
+                ->isRequired()
+                ->defaultValue('open-ssl')
             ->end()
         ->end();
     }
@@ -81,8 +108,15 @@ class Configuration implements ConfigurationInterface
                 ->info('Concrete class to handle data encryption and decryption')
                 ->isRequired()
                 ->children()
-                    ->scalarNode('name')->defaultValue('AES256')->info('Data manager strategy name')->isRequired()->end()
-                    ->arrayNode('parameters')->info('Configuration for specific strategy data manager')->end()
+                    ->enumNode('name')
+                        ->values(['AES256'])
+                        ->defaultValue('AES256')
+                        ->info('Data manager strategy name')
+                        ->isRequired()
+                    ->end()
+                    ->arrayNode('parameters')
+                        ->info('Configuration for specific strategy data manager')
+                    ->end()
                 ->end()
             ->end()
         ->end();
@@ -98,7 +132,8 @@ class Configuration implements ConfigurationInterface
     {
         $rootNode->children()
             ->scalarNode('aggregate_keys')
-                ->info(sprintf('A service definition id implementing %s',AggregateKeys::class))->isRequired()->end()
+                ->info(sprintf('A service definition id implementing %s',AggregateKeys::class))
+                ->isRequired()
             ->end()
         ->end();
     }
@@ -148,9 +183,16 @@ class Configuration implements ConfigurationInterface
                 ->arrayNode('AES256')
                     ->info('Protocol strategy to handle data encryption and decryption')
                     ->children()
-                        ->scalarNode('key')->info('Encryption key to sensitize data. If null you will need to pass the key at runtime')->isRequired()->end()
-                        ->scalarNode('iv')->info('Initialization vector. If null it will be generated internally and iv_encoding must be set to true')->end()
-                        ->scalarNode('iv_encoding')->info('Encrypt the iv and is appends to encrypted value. It makes sense to set it to true if the iv option is set to null')->end()
+                        ->scalarNode('key')
+                            ->info('Encryption key to sensitize data. If null you will need to pass the key at runtime')
+                            ->isRequired()
+                        ->end()
+                        ->scalarNode('iv')
+                            ->info('Initialization vector. If null it will be generated internally and iv_encoding must be set to true')
+                        ->end()
+                        ->booleanNode('iv_encoding')
+                            ->info('Encrypt the iv and is appends to encrypted value. It makes sense to set it to true if the iv option is set to null')
+                        ->end()
                     ->end()
                 ->end()
             ->end();
@@ -159,7 +201,10 @@ class Configuration implements ConfigurationInterface
     private function setAggregateMasterKey(ArrayNodeDefinition $node): void
     {
         $node->children()
-            ->scalarNode('aggregate_master_key')->isRequired()->info('Master key to encrypt the keys of aggregates. Get it from an external service or environment variable')->end()
+            ->scalarNode('aggregate_master_key')
+                ->isRequired()
+                ->info('Master key to encrypt the keys of aggregates. Get it from an external service or environment variable')
+            ->end()
         ->end();
     }
 }

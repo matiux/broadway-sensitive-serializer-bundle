@@ -6,6 +6,8 @@ services:
       $sensitiveDataManager: '@broadway_sensitive_serializer.data_manager'
       $aggregateKeyManager: '@broadway_sensitive_serializer.aggregate_key_manager'
       $automaticAggregateKeyCreation: '%matiux.broadway.sensitive_serializer.strategy.aggregate_key_auto_creation%'
+      $excludedKeys: '%matiux.broadway.sensitive_serializer.strategy.excluded_keys%'
+      $excludedIdKey: '%matiux.broadway.sensitive_serializer.strategy.excluded_id_key%'
 
   broadway_sensitive_serializer.strategy.whole:
     class: Matiux\Broadway\SensitiveSerializer\Serializer\Strategy\WholePayloadStrategy\WholePayloadSensitizerStrategy
