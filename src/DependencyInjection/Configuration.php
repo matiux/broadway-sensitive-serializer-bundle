@@ -40,7 +40,10 @@ class Configuration implements ConfigurationInterface
                 ->isRequired()->info('Strategy configuration to sensitize events payload')
                 ->children()
                     ->enumNode('name')
-                    ->values([RegisterWholeStrategyCompilerPass::STRATEGY_NAME])
+                    ->values([
+                        RegisterWholeStrategyCompilerPass::STRATEGY_NAME,
+                        RegisterPartialStrategyCompilerPass::STRATEGY_NAME,
+                    ])
                     ->isRequired()
                     ->info('Strategy name to sensitize events payload. Use partial or whole.')
                 ->end()
@@ -55,6 +58,7 @@ class Configuration implements ConfigurationInterface
         $this->expandParameters($rootNode->find('strategy'));
 
         $this->addWholeStrategyParameters($rootNode);
+        $this->addPartialStrategyParameters($rootNode);
     }
 
     private function addWholeStrategyParameters(ArrayNodeDefinition $node): void
@@ -63,7 +67,7 @@ class Configuration implements ConfigurationInterface
         $strategyParameterNode = $node->find('strategy.parameters');
         
         $strategyParameterNode->children()
-            ->arrayNode('whole')
+            ->arrayNode(RegisterWholeStrategyCompilerPass::STRATEGY_NAME)
                 ->info('Strategy to sensitize all keys in payload but the id')
                 ->children()
                     ->booleanNode('aggregate_key_auto_creation')
@@ -89,6 +93,24 @@ class Configuration implements ConfigurationInterface
         ->end();
     }
 
+    private function addPartialStrategyParameters(ArrayNodeDefinition $node): void
+    {
+        /** @var ArrayNodeDefinition $strategyParameterNode */
+        $strategyParameterNode = $node->find('strategy.parameters');
+        
+        $strategyParameterNode->children()
+            ->arrayNode(RegisterPartialStrategyCompilerPass::STRATEGY_NAME)
+                ->info('Strategy for payload sensitization in a custom way')
+                ->children()
+                    ->booleanNode('aggregate_key_auto_creation')
+                        ->defaultTrue()
+                        ->info('Choose whether to use auto creation for the aggregate_key. Default true')
+                    ->end()
+                ->end()
+            ->end()
+        ->end();
+    }
+    
     private function configureKeyGenerator(ArrayNodeDefinition $rootNode): void
     {
         $rootNode->children()

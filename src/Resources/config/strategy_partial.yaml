@@ -1,0 +1,5 @@
+services:
+  broadway_sensitive_serializer.strategy.partial:
+    class: Matiux\Broadway\SensitiveSerializer\Serializer\Strategy\PartialPayloadStrategy\PartialPayloadSensitizerStrategy
+    arguments:
+      $partialPayloadSensitizerRegistry: '@broadway_sensitive_serializer.strategy.partial.registry'

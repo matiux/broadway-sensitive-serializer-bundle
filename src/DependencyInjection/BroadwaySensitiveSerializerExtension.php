@@ -91,6 +91,10 @@ class BroadwaySensitiveSerializerExtension extends ConfigurableExtension
                 $this->bindWholeStrategy($config, $container);
 
                 break;
+            case RegisterPartialStrategyCompilerPass::STRATEGY_NAME:
+                $this->bindPartialStrategy($config, $container);
+
+                break;
             default:
                 throw new \LogicException('Invalid strategy');
         }
@@ -112,10 +116,18 @@ class BroadwaySensitiveSerializerExtension extends ConfigurableExtension
             'matiux.broadway.sensitive_serializer.strategy.excluded_id_key',
             $config['strategy']['parameters'][RegisterWholeStrategyCompilerPass::STRATEGY_NAME]['excluded_id_key']
         );
-        
+
         $container->setParameter(
             'matiux.broadway.sensitive_serializer.strategy.whole.events',
             $config['strategy']['parameters'][RegisterWholeStrategyCompilerPass::STRATEGY_NAME]['events']
+        );
+    }
+
+    private function bindPartialStrategy(array $config, ContainerBuilder $container): void
+    {
+        $container->setParameter(
+            'matiux.broadway.sensitive_serializer.strategy.aggregate_key_auto_creation',
+            $config['strategy']['parameters'][RegisterPartialStrategyCompilerPass::STRATEGY_NAME]['aggregate_key_auto_creation']
         );
     }
 }
