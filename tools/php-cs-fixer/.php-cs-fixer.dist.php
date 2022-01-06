@@ -3,9 +3,9 @@
 declare(strict_types=1);
 
 $finder = PhpCsFixer\Finder::create()
-    ->in(__DIR__)
-    ->exclude(['src/DependencyInjection/Configuration.php'])
-    ->depth(0);
+    ->in(['/var/www/app/src', '/var/www/app/tests'])
+    //->exclude(['dir'])
+    ->notPath('DependencyInjection/Configuration.php');
 
 $config = new PhpCsFixer\Config();
 $rules = [

@@ -24,7 +24,7 @@ class AggregateKeysExtensionTest extends AbstractExtensionTestCase
     public function it_does_not_register_the_key_generator_service_when_not_configured(): void
     {
         $this->load([
-            'aggregate_keys' => ''
+            'aggregate_keys' => '',
         ]);
 
         $this->assertFalse($this->container->hasParameter('broadway_sensitive_serializer.key_generator.service_id'));
@@ -37,7 +37,7 @@ class AggregateKeysExtensionTest extends AbstractExtensionTestCase
     {
         $this->load([
             'key_generator' => 'open_ssl',
-            'aggregate_keys' => ''
+            'aggregate_keys' => '',
         ]);
 
         $this->assertContainerBuilderHasAlias(KeyGenerator::class, 'broadway_sensitive_serializer.key_generator.open_ssl');

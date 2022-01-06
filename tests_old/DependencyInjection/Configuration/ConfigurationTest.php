@@ -4,9 +4,8 @@ declare(strict_types=1);
 
 namespace Test\Matiux\Broadway\SensitiveSerializer\Bundle\SensitiveSerializerBundle\DependencyInjection\Configuration;
 
-use InvalidArgumentException;
-use Matiux\Broadway\SensitiveSerializer\Bundle\SensitiveSerializerBundle\DependencyInjection\Configuration;
 use Matiux\Broadway\SensitiveSerializer\Bundle\SensitiveSerializerBundle\DependencyInjection\BroadwaySensitiveSerializerExtension;
+use Matiux\Broadway\SensitiveSerializer\Bundle\SensitiveSerializerBundle\DependencyInjection\Configuration;
 use Matthias\SymfonyDependencyInjectionTest\PhpUnit\AbstractExtensionConfigurationTestCase;
 use Symfony\Component\Config\Definition\Exception\InvalidConfigurationException;
 use Symfony\Component\DependencyInjection\Extension\ExtensionInterface;
@@ -39,7 +38,7 @@ class ConfigurationTest extends AbstractExtensionConfigurationTestCase
         $this->expectExceptionMessage('The child config "strategy" under "broadway_sensitive_serializer" must be configured: Strategy to sensitize events payload');
         $this->assertProcessedConfigurationEquals(
             [
-                'aggregate_keys' => ''
+                'aggregate_keys' => '',
             ],
             [
                 Path::testResources().'/no_config.yaml',
@@ -56,7 +55,7 @@ class ConfigurationTest extends AbstractExtensionConfigurationTestCase
         $this->expectExceptionMessage('The child config "strategy" under "broadway_sensitive_serializer" must be configured: Strategy to sensitize events payload');
         $this->assertProcessedConfigurationEquals(
             [
-                'aggregate_keys' => ''
+                'aggregate_keys' => '',
             ],
             [
                 Path::testResources().'/empty_config.yaml',

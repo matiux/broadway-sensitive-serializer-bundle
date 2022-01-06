@@ -43,10 +43,20 @@ class RegisterPartialStrategyCompilerPass extends RegisterStrategyCompilerPass
     {
         $serializers = [];
 
-        foreach ($container->findTaggedServiceIds('broadway.sensitive_serializer.partial') as $id => $attributes) {
+        /** @var PayloadSensitizer[] $a */
+        $sensitizers = $container->findTaggedServiceIds('broadway.sensitive_serializer.partial');
+
+        /**
+         * @var class-string $id
+         */
+        foreach ($sensitizers as $id => $_) {
             $def = $container->getDefinition($id);
 
-            // Definition getClass can return a parameter
+            /**
+             * Definition getClass can return a parameter.
+             *
+             * @var class-string $class
+             */
             $class = $container->getParameterBag()->resolveValue($def->getClass());
 
             $refClass = new ReflectionClass($class);

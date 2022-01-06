@@ -5,24 +5,22 @@ declare(strict_types=1);
 namespace Matiux\Broadway\SensitiveSerializer\Bundle\SensitiveSerializerBundle\DependencyInjection;
 
 use Matiux\Broadway\SensitiveSerializer\DataManager\Domain\Aggregate\AggregateKeys;
-use Symfony\Component\Config\Definition\ArrayNode;
 use Symfony\Component\Config\Definition\Builder\ArrayNodeDefinition;
+use Symfony\Component\Config\Definition\Builder\NodeDefinition;
 use Symfony\Component\Config\Definition\Builder\TreeBuilder;
 use Symfony\Component\Config\Definition\ConfigurationInterface;
 use Webmozart\Assert\Assert;
 
+/**
+ * @psalm-suppress PossiblyNullReference, PossiblyUndefinedMethod, MixedMethodCall, UnusedMethodCall
+ */
 class Configuration implements ConfigurationInterface
 {
-    public function getConfigTreeBuilder()
+    public function getConfigTreeBuilder(): TreeBuilder
     {
         $treeBuilder = new TreeBuilder('broadway_sensitive_serializer');
 
-        if (\method_exists($treeBuilder, 'getRootNode')) {
-            $rootNode = $treeBuilder->getRootNode();
-        } else {
-            // BC layer for symfony/config 4.1 and older
-            $rootNode = $treeBuilder->root('broadway_sensitive_serializer');
-        }
+        $rootNode = $this->obtainRootNode($treeBuilder);
 
         $this->configureStrategy($rootNode);
         $this->configureKeyGenerator($rootNode);
@@ -31,6 +29,26 @@ class Configuration implements ConfigurationInterface
         $this->setAggregateMasterKey($rootNode);
 
         return $treeBuilder;
+    }
+
+    private function obtainRootNode(TreeBuilder $treeBuilder): ArrayNodeDefinition
+    {
+        if (method_exists($treeBuilder, 'getRootNode')) {
+            $rootNode = $treeBuilder->getRootNode();
+        } elseif (method_exists($treeBuilder, 'root')) {
+            /**
+             * BC layer for symfony/config 4.1 and older.
+             *
+             * @var ArrayNodeDefinition|NodeDefinition
+             */
+            $rootNode = $treeBuilder->root('broadway_sensitive_serializer');
+        } else {
+            throw new \LogicException("Can't obtain root node");
+        }
+
+        Assert::isInstanceOf($rootNode, ArrayNodeDefinition::class);
+
+        return $rootNode;
     }
 
     private function configureStrategy(ArrayNodeDefinition $rootNode): void
@@ -160,12 +178,12 @@ class Configuration implements ConfigurationInterface
         ->end();
     }
 
-    private function expandName(ArrayNodeDefinition $node): void
+    private function expandName(NodeDefinition $node): void
     {
         $node
             ->beforeNormalization()
             ->ifString()
-            ->then(function ($v) {
+            ->then(function (string $v) {
                 return [
                     'name' => $v
                 ];
@@ -174,25 +192,37 @@ class Configuration implements ConfigurationInterface
         ;
     }
 
-    private function expandParameters(ArrayNodeDefinition $node): void
+    private function expandParameters(NodeDefinition $node): void
     {
         $node
             ->beforeNormalization()
             ->ifArray()
-            ->then(function ($v) {
-                $v2 = [
-                    'name' => $v['name'],
+            ->then(function (array $originalConfig) {
+
+                $normalizedConfig = [
+                    'name' => $originalConfig['name'],
                 ];
-                if (isset($v['parameters'])) {
-                    $v2['parameters'] = $v['parameters'];
-                }
-                foreach ($v as $key => $value) {
-                    if ($key =='name' || $key =='parameters') {
-                        continue;
+
+                if (isset($originalConfig['parameters'])) {
+
+                    Assert::isArray($originalConfig['parameters']);
+
+                    $normalizedConfig['parameters'] = $originalConfig['parameters'];
+
+                } else {
+
+                    /** @var int|string|bool $value */
+                    foreach ($originalConfig as $key => $value) {
+
+                        if (in_array($key, ['name', 'parameters'])) {
+                            continue;
+                        }
+
+                        $normalizedConfig['parameters'][(string)$originalConfig['name']][$key] = $value;
                     }
-                    $v2['parameters'][$v['name']][$key] = $value;
                 }
-                return $v2;
+
+                return $normalizedConfig;
             })
             ->end()
         ;
@@ -200,24 +230,27 @@ class Configuration implements ConfigurationInterface
 
     private function addAES256Parameters(ArrayNodeDefinition $node): void
     {
-        $node->find('data_manager.parameters')
-            ->children()
-                ->arrayNode('AES256')
-                    ->info('Protocol strategy to handle data encryption and decryption')
-                    ->children()
-                        ->scalarNode('key')
-                            ->info('Encryption key to sensitize data. If null you will need to pass the key at runtime')
-                            ->isRequired()
-                        ->end()
-                        ->scalarNode('iv')
-                            ->info('Initialization vector. If null it will be generated internally and iv_encoding must be set to true')
-                        ->end()
-                        ->booleanNode('iv_encoding')
-                            ->info('Encrypt the iv and is appends to encrypted value. It makes sense to set it to true if the iv option is set to null')
-                        ->end()
+        $nodeChildren = $node->find('data_manager.parameters');
+
+        Assert::isInstanceOf($nodeChildren,ArrayNodeDefinition::class);
+
+        $nodeChildren->children()
+            ->arrayNode('AES256')
+                ->info('Protocol strategy to handle data encryption and decryption')
+                ->children()
+                    ->scalarNode('key')
+                        ->info('Encryption key to sensitize data. If null you will need to pass the key at runtime')
+                        ->isRequired()
+                    ->end()
+                    ->scalarNode('iv')
+                        ->info('Initialization vector. If null it will be generated internally and iv_encoding must be set to true')
+                    ->end()
+                    ->booleanNode('iv_encoding')
+                        ->info('Encrypt the iv and is appends to encrypted value. It makes sense to set it to true if the iv option is set to null')
                     ->end()
                 ->end()
-            ->end();
+            ->end()
+        ->end();
     }
 
     private function setAggregateMasterKey(ArrayNodeDefinition $node): void

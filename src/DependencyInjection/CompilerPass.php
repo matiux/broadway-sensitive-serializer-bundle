@@ -12,7 +12,7 @@ use Symfony\Component\DependencyInjection\ContainerBuilder;
 
 abstract class CompilerPass implements CompilerPassInterface
 {
-    protected function assertContainerHasDefinition(ContainerBuilder $container, $definitionId)
+    protected function assertContainerHasDefinition(ContainerBuilder $container, string $definitionId): void
     {
         if (!$container->hasDefinition($definitionId)) {
             throw new InvalidArgumentException(sprintf('Service id "%s" could not be found in container', $definitionId));
@@ -22,15 +22,17 @@ abstract class CompilerPass implements CompilerPassInterface
     /**
      * @param ContainerBuilder $container
      * @param string           $definitionId
-     * @param string           $interface
+     * @param class-string     $interface
      *
      * @throws ReflectionException
      */
-    protected function assertDefinitionImplementsInterface(ContainerBuilder $container, string $definitionId, string $interface)
+    protected function assertDefinitionImplementsInterface(ContainerBuilder $container, string $definitionId, string $interface): void
     {
         $this->assertContainerHasDefinition($container, $definitionId);
 
         $definition = $container->getDefinition($definitionId);
+
+        /** @var class-string $definitionClass */
         $definitionClass = $container->getParameterBag()->resolveValue($definition->getClass());
 
         $reflectionClass = new ReflectionClass($definitionClass);

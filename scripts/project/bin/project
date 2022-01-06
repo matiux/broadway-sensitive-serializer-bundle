@@ -119,7 +119,7 @@ while :; do
     exit $?
     ;;
   coding-standard-fix-all)
-    coding_standard_fix ./src ./tests
+    coding_standard_fix
     exit $?
     ;;
   coding-standard-fix-staged)
@@ -131,7 +131,7 @@ while :; do
     exit $?
     ;;
   coding-standard-check-all)
-    coding_standard_fix --dry-run ./src ./tests
+    coding_standard_fix --dry-run
     exit $?
     ;;
   shortlist)
