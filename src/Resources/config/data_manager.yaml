@@ -1,0 +1,7 @@
+services:
+  broadway_sensitive_serializer.data_manager.aes256:
+    class: Matiux\Broadway\SensitiveSerializer\DataManager\Infrastructure\Domain\Service\AES256SensitiveDataManager
+    arguments:
+      $secretKey: '%matiux.broadway.sensitive_serializer.key%'
+      $iv: '%matiux.broadway.sensitive_serializer.iv%'
+      $ivEncoding: '%matiux.broadway.sensitive_serializer.iv_encoding%'

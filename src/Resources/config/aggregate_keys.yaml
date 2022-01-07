@@ -1,0 +1,3 @@
+services:
+  broadway_sensitive_serializer.aggregate_keys.in_memory:
+    class: Matiux\Broadway\SensitiveSerializer\DataManager\Infrastructure\Domain\Aggregate\InMemoryAggregateKeys

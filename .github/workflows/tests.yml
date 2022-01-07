@@ -1,0 +1,37 @@
+name: "Test"
+
+on:
+  pull_request: ~
+  push: ~
+  workflow_dispatch: ~
+
+jobs:
+
+  run-tests:
+    name: Run tests
+    runs-on: "ubuntu-latest"
+
+    steps:
+#      - name: Verify MySQL connection from container
+#        run: mysql --host 127.0.0.1 --port 32574 -uroot -proot -e "SHOW DATABASES"
+
+      - name: Checkout code
+        uses: "actions/checkout@v2"
+
+      - name: Install dependencies
+        run: ./scripts/project/bin/project install_dependencies
+
+      - name: Create Schema
+        run: ./scripts/project/bin/project schema-create
+
+      - name: "Run unit tests (PHPUnit)"
+        env:
+          XDEBUG_MODE: coverage
+
+        run: ./scripts/project/bin/project coverage
+
+      - name: Upload coverage to Codecov
+        uses: codecov/codecov-action@v1
+        with:
+          token: ${{ secrets.CODECOV_TOKEN }}
+          file: ./.coverage/coverage-clover.xml

@@ -10,7 +10,9 @@
     "ddd",
     "sensitization",
     "serializer",
-    "gdpr"
+    "gdpr",
+    "symfony",
+    "bundle"
   ],
   "authors": [
     {
@@ -20,29 +22,37 @@
   ],
   "require": {
     "php": "^7.4|^8",
-    "broadway/broadway": "^2.4",
-    "symfony/polyfill-php80": "^1.0"
+    "broadway/broadway-bundle": "^0.5 | ^0.6",
+    "matiux/broadway-sensitive-serializer": "^0.1",
+    "symfony/console": "^5.4 | ^6.0",
+    "symfony/polyfill-php81": "^1.0"
   },
   "require-dev": {
     "friendsofphp/php-cs-fixer": "^3.1",
+    "matthiasnoback/symfony-dependency-injection-test": "^4.3",
     "mockery/mockery": "^1.4",
     "phpunit/phpunit": "^9.5",
     "psalm/plugin-mockery": "^0.9.0",
     "psalm/plugin-phpunit": "^0.16.1",
+    "psalm/plugin-symfony": "^3.1",
     "roave/security-advisories": "dev-latest",
-    "symfony/var-dumper": "^5.3",
+    "symfony/framework-bundle": "^5.3 | ^6.0",
+    "symfony/var-dumper": "^5.3 | ^6.0",
+    "symfony/yaml": "^5.4",
     "vimeo/psalm": "^4.10"
   },
   "suggest": {
-    "broadway/event-store-dbal": "Event store implementation using doctrine/dbal"
+    "broadway/event-store-dbal": "Event store implementation using doctrine/dbal",
+    "broadway-sensitive-serializer-dbal": "Broadway sensitive serializer dbal implementation using doctrine/dbal"
   },
   "autoload": {
     "psr-4": {
-      "Matiux\\Broadway\\Bundle\\SensitiveSerializerBundle\\": "src/SensitiveSerializerBundle/"
+      "Matiux\\Broadway\\SensitiveSerializer\\Bundle\\SensitiveSerializerBundle\\": "src/"
     }
   },
   "autoload-dev": {
     "psr-4": {
+      "Test\\Matiux\\Broadway\\SensitiveSerializer\\Bundle\\SensitiveSerializerBundle\\": "tests/"
     }
   },
   "config": {

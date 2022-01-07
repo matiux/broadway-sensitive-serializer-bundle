@@ -1,0 +1,6 @@
+services:
+  broadway_sensitive_serializer.serializer:
+    class: Matiux\Broadway\SensitiveSerializer\Serializer\SensitiveSerializer
+    arguments:
+      $serializer: '@broadway.simple_interface_serializer'
+      $sensitizer: '@broadway_sensitive_serializer.strategy'
