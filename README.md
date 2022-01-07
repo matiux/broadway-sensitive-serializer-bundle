@@ -100,9 +100,3 @@ services:
       $useBinary: false
       $binaryUuidConverter: "@broadway.uuid.converter"
 ```
-
-## WIP command
-```shell
-php bin/console debug:container broadway_sensitive_serializer --show-arguments
-php bin/console debug:container --parameter=matiux.broadway.sensitive_serializer.strategy
-```
