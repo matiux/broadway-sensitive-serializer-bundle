@@ -18,12 +18,10 @@ abstract class RegisterStrategyCompilerPass extends CompilerPass
     public function process(ContainerBuilder $container): void
     {
         if (
-            !$container->hasParameter(self::STRATEGY_ID)
-            || $this->strategyName() != $container->getParameter(self::STRATEGY_ID)
+            $container->hasParameter(self::STRATEGY_ID)
+            && $this->strategyName() === $container->getParameter(self::STRATEGY_ID)
         ) {
-            return;
+            $this->doProcess($container);
         }
-
-        $this->doProcess($container);
     }
 }

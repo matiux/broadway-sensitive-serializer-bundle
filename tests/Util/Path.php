@@ -11,6 +11,11 @@ class Path
         return realpath(__DIR__.'/..');
     }
 
+    public static function projectDir(): string
+    {
+        return realpath(self::test().'/../src/Resources');
+    }
+
     public static function testResources(): string
     {
         return realpath(self::test().'/Resources');

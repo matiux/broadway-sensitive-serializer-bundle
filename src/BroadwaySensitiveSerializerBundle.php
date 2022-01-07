@@ -10,6 +10,9 @@ use Matiux\Broadway\SensitiveSerializer\Bundle\SensitiveSerializerBundle\Depende
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\HttpKernel\Bundle\Bundle;
 
+/**
+ * @codeCoverageIgnore
+ */
 class BroadwaySensitiveSerializerBundle extends Bundle
 {
     /**

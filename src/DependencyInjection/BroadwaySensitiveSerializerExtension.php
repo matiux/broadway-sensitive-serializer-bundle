@@ -104,7 +104,7 @@ class BroadwaySensitiveSerializerExtension extends ConfigurableExtension
 
         $strategyName = (string) $config['strategy']['name'];
 
-        $container->setParameter('matiux.broadway.sensitive_serializer.strategy', $strategyName);
+        $container->setParameter(RegisterStrategyCompilerPass::STRATEGY_ID, $strategyName);
 
         switch ($strategyName) {
             case RegisterWholeStrategyCompilerPass::STRATEGY_NAME:
@@ -144,7 +144,7 @@ class BroadwaySensitiveSerializerExtension extends ConfigurableExtension
         );
 
         $container->setParameter(
-            'matiux.broadway.sensitive_serializer.strategy.whole.events',
+            RegisterWholeStrategyCompilerPass::STRATEGY_WHOLE_EVENTS_PARAMETER,
             $wholeStrategyConfig['events']
         );
     }

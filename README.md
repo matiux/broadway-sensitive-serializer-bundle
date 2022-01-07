@@ -1,6 +1,14 @@
 Broadway sensitization support Bundle
 =====
 
+![check dependencies](https://github.com/matiux/broadway-sensitive-serializer-bundle/actions/workflows/check-dependencies.yml/badge.svg)
+![test](https://github.com/matiux/broadway-sensitive-serializer-bundle/actions/workflows/tests.yml/badge.svg)
+[![codecov](https://codecov.io/gh/matiux/broadway-sensitive-serializer-bundle/branch/master/graph/badge.svg)](https://codecov.io/gh/matiux/broadway-sensitive-serializer-bundle)
+[![type coverage](https://shepherd.dev/github/matiux/broadway-sensitive-serializer-bundle/coverage.svg)](https://shepherd.dev/github/matiux/broadway-sensitive-serializer-bundle)
+[![psalm level](https://shepherd.dev/github/matiux/broadway-sensitive-serializer-bundle/level.svg)](https://shepherd.dev/github/matiux/broadway-sensitive-serializer-bundle)
+![security analysis status](https://github.com/matiux/broadway-sensitive-serializer-bundle/actions/workflows/security-analysis.yml/badge.svg)
+![coding standards status](https://github.com/matiux/broadway-sensitive-serializer-bundle/actions/workflows/coding-standards.yml/badge.svg)
+
 ```shell
 git clone https://github.com/matiux/broadway-sensitive-serializer-bundle.git && cd broadway-sensitive-serializer-bundle
 cp docker/docker-compose.override.dist.yml docker/docker-compose.override.yml
