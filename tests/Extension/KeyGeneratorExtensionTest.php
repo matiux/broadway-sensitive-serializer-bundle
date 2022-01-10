@@ -48,7 +48,9 @@ class KeyGeneratorExtensionTest extends AbstractExtensionTestCase
     public function it_throws_when_key_generator_has_invalid_value(): void
     {
         self::expectException(InvalidConfigurationException::class);
-        self::expectExceptionMessage('The value "md5" is not allowed for path "broadway_sensitive_serializer.key_generator". Permissible values: "open-ssl"');
+        self::expectExceptionMessage(
+            'The value "md5" is not allowed for path "broadway_sensitive_serializer.key_generator". Permissible values: "open-ssl"'
+        );
 
         $shortPartialConfig = (array) Yaml::parseFile(Path::testResources().'/short_partial_config.yaml');
         $shortPartialConfig = (array) $shortPartialConfig[(string) array_key_first($shortPartialConfig)];
