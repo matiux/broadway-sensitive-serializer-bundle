@@ -9,13 +9,32 @@ Broadway sensitization support Bundle
 ![security analysis status](https://github.com/matiux/broadway-sensitive-serializer-bundle/actions/workflows/security-analysis.yml/badge.svg)
 ![coding standards status](https://github.com/matiux/broadway-sensitive-serializer-bundle/actions/workflows/coding-standards.yml/badge.svg)
 
+This bundle is the wrapper for the Broadway [Sensitive Serializer library](https://github.com/matiux/broadway-sensitive-serializer).
+You can find more info on the base library [here](https://github.com/matiux/broadway-sensitive-serializer/wiki).
+
+### Setup for development
+
 ```shell
 git clone https://github.com/matiux/broadway-sensitive-serializer-bundle.git && cd broadway-sensitive-serializer-bundle
 cp docker/docker-compose.override.dist.yml docker/docker-compose.override.yml
 rm -rf .git/hooks && ln -s ../scripts/git-hooks .git/hooks
 ```
 
-## Partial Strategy configuration
+### Install dependencies to run test or execute examples
+```shell
+./dc up -d
+./dc enter
+composer install
+```
+### Run test
+```shell
+./dc up -d
+./dc enter
+project phpunit
+```
+
+### Partial Strategy configuration
+[Read the docs](https://github.com/matiux/broadway-sensitive-serializer/wiki/%5BIT%5D-3.Moduli#partial-strategy)
 ```yaml
 broadway_sensitive_serializer:
   aggregate_master_key: 'm4$t3rS3kr3tk31' # Master key to encrypt the keys of aggregates. Get it from an external service or environment variable
@@ -45,7 +64,8 @@ broadway_sensitive_serializer:
   #    partial:
   #      aggregate_key_auto_creation: true
 ```
-## Whole Strategy configuration
+### Whole Strategy configuration
+[Read the docs](https://github.com/matiux/broadway-sensitive-serializer/wiki/%5BIT%5D-3.Moduli#whole-strategy)
 ```yaml
 broadway_sensitive_serializer:
   aggregate_master_key: 'm4$t3rS3kr3tk31' # Master key to encrypt the keys of aggregates. Get it from an external service or environment variable
@@ -86,17 +106,4 @@ broadway_sensitive_serializer:
   #      events:
   #        - SensitiveUser\User\Domain\Event\AddressAdded
   #        - SensitiveUser\User\Domain\Event\UserRegistered
-```
-
-## DBALAggregateKeys configuration
-
-```yaml
-services:
-  broadway_sensitive_serializer.aggregate_keys.dbal:
-    class: Matiux\Broadway\SensitiveSerializer\Dbal\DBALAggregateKeys
-    arguments:
-      $connection: "@doctrine.dbal.default_connection"
-      $tableName: "aggregate_keys"
-      $useBinary: false
-      $binaryUuidConverter: "@broadway.uuid.converter"
 ```

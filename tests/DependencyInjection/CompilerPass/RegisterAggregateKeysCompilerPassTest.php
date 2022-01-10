@@ -27,7 +27,10 @@ class RegisterAggregateKeysCompilerPassTest extends AbstractCompilerPassTestCase
     {
         $this->compile();
 
-        $this->assertContainerBuilderHasAlias('broadway_sensitive_serializer.aggregate_keys', 'broadway_sensitive_serializer.aggregate_keys.in_memory');
+        $this->assertContainerBuilderHasAlias(
+            'broadway_sensitive_serializer.aggregate_keys',
+            'broadway_sensitive_serializer.aggregate_keys.in_memory'
+        );
     }
 
     /**
@@ -35,12 +38,15 @@ class RegisterAggregateKeysCompilerPassTest extends AbstractCompilerPassTestCase
      */
     public function it_sets_the_public_aggregate_keys_repo_alias(): void
     {
-        $this->container->setParameter('broadway_sensitive_serializer.aggregate_keys.service_id', 'my_event_store');
+        $this->container->setParameter(
+            'broadway_sensitive_serializer.aggregate_keys.service_id',
+            'my_aggregate_keys_repo'
+        );
 
-        $this->setDefinition('my_event_store', new Definition(AggregateKeys::class));
+        $this->setDefinition('my_aggregate_keys_repo', new Definition(AggregateKeys::class));
         $this->compile();
 
-        $this->assertContainerBuilderHasAlias('broadway_sensitive_serializer.aggregate_keys', 'my_event_store');
+        $this->assertContainerBuilderHasAlias('broadway_sensitive_serializer.aggregate_keys', 'my_aggregate_keys_repo');
         $this->assertTrue($this->container->getAlias('broadway_sensitive_serializer.aggregate_keys')->isPublic());
     }
 }

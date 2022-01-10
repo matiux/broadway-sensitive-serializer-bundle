@@ -33,9 +33,14 @@ class RegisterWholeStrategyCompilerPassTest extends AbstractCompilerPassTestCase
     public function it_throws_when_events_are_not_set(): void
     {
         self::expectException(LogicException::class);
-        self::expectExceptionMessage(sprintf('`%s` is not set', RegisterWholeStrategyCompilerPass::STRATEGY_WHOLE_EVENTS_PARAMETER));
+        self::expectExceptionMessage(
+            sprintf('`%s` is not set', RegisterWholeStrategyCompilerPass::STRATEGY_WHOLE_EVENTS_PARAMETER)
+        );
 
-        $this->container->setParameter(RegisterStrategyCompilerPass::STRATEGY_ID, RegisterWholeStrategyCompilerPass::STRATEGY_NAME);
+        $this->container->setParameter(
+            RegisterStrategyCompilerPass::STRATEGY_ID,
+            RegisterWholeStrategyCompilerPass::STRATEGY_NAME
+        );
 
         $this->compile();
     }
@@ -45,7 +50,10 @@ class RegisterWholeStrategyCompilerPassTest extends AbstractCompilerPassTestCase
      */
     public function it_registers_whole_strategy_registry_with_supported_events(): void
     {
-        $this->container->setParameter(RegisterStrategyCompilerPass::STRATEGY_ID, RegisterWholeStrategyCompilerPass::STRATEGY_NAME);
+        $this->container->setParameter(
+            RegisterStrategyCompilerPass::STRATEGY_ID,
+            RegisterWholeStrategyCompilerPass::STRATEGY_NAME
+        );
         $this->container->setParameter(
             RegisterWholeStrategyCompilerPass::STRATEGY_WHOLE_EVENTS_PARAMETER,
             ['Event\Registered']
