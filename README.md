@@ -20,12 +20,27 @@ cp docker/docker-compose.override.dist.yml docker/docker-compose.override.yml
 rm -rf .git/hooks && ln -s ../scripts/git-hooks .git/hooks
 ```
 
+### Interact with the PHP container
+This is a bash script that wrap major docker-compose function. You can find it [here](./docker/dc.sh) and there is a symbolic link in project root.
+
+Some uses:
+```shell
+./dc up -d
+./dc enter
+./dc phpunit
+./dc psalm
+./dc coding-standard-fix-staged
+./dc build php --no-cache
+```
+Check out [here](./docker/dc.sh) for all the options.
+
 ### Install dependencies to run test or execute examples
 ```shell
 ./dc up -d
 ./dc enter
 composer install
 ```
+
 ### Run test
 ```shell
 ./dc up -d
@@ -35,32 +50,34 @@ project phpunit
 
 ### Whole Strategy configuration
 [Read the docs](https://github.com/matiux/broadway-sensitive-serializer/wiki/%5BIT%5D-3.Moduli#whole-strategy)
+
 ```yaml
 broadway_sensitive_serializer:
   aggregate_master_key: 'm4$t3rS3kr3tk31' # Master key to encrypt the keys of aggregates. Get it from an external service or environment variable
-  key_generator: open-ssl
-  #aggregate_keys: broadway_sensitive_serializer.aggregate_keys.in_memory
+  key_generator: open-ssl # For now is the only one generator implemented
+  # To use the DBAL  implementation, install matiux/broadway-sensitive-serializer-dbal package with composer
   aggregate_keys: broadway_sensitive_serializer.aggregate_keys.dbal
+  #aggregate_keys: broadway_sensitive_serializer.aggregate_keys.in_memory # Default implementation, of little use outside of testing
   data_manager:
-    name: AES256
-    key: null # Encryption key to sensitize data. If null you will need to pass the key at runtime
-    iv: null # Initialization vector. If null it will be generated internally and iv_encoding must be set to true
-    iv_encoding: true # Encrypt the iv and is appends to encrypted value. It makes sense to set it to true if the iv option is set to null
+    name: AES256 # For now, it is the only encryption strategy implemented
+    key: null # Encryption key to sensitize data. If null you will need to pass the key at runtime. This is the convenient way, check out the examples and wiki on main library
+    iv: null # Initialization vector. If null it will be generated internally and iv_encoding must be set to true. This is the convenient way, check out the examples and wiki on main library
+    iv_encoding: true # Encrypt the iv and is appends to encrypted value. It makes sense to set it to true if the iv option is set to null. This is the convenient way, check out the examples and wiki on main library
     #--- Alternatively -----
     #data_manager:
     #  name: AES256
     #  parameters:
     #    AES256:
-    #      key: null # Encryption key to sensitize data. If null you will need to pass the key at runtime
-    #      iv: null # Initialization vector. If null it will be generated internally and iv_encoding must be set to true
-    #      iv_encoding: true # Encrypt the iv and is appends to encrypted value. It makes sense to set it to true if the iv option is set to null
+    #      key: null
+    #      iv: null
+    #      iv_encoding: true
   strategy:
     name: whole
-    aggregate_key_auto_creation: true
-    excluded_id_key: id
-    excluded_keys:
+    aggregate_key_auto_creation: true # Enable AggregateKey model auto creation. This is the convenient way, check out the examples and wiki on main library
+    excluded_id_key: id # The key of the aggregate id which should not be encrypted
+    excluded_keys: # List of keys to be excluded from encryption
       - occurred_at
-    events:
+    events: # List of events supported by the strategy
       - SensitiveUser\User\Domain\Event\AddressAdded
       - SensitiveUser\User\Domain\Event\UserRegistered
   #--- Alternatively -----
@@ -82,28 +99,29 @@ broadway_sensitive_serializer:
 ```yaml
 broadway_sensitive_serializer:
   aggregate_master_key: 'm4$t3rS3kr3tk31' # Master key to encrypt the keys of aggregates. Get it from an external service or environment variable
-  key_generator: open-ssl
-  #aggregate_keys: broadway_sensitive_serializer.aggregate_keys.in_memory
+  key_generator: open-ssl # For now is the only one generator implemented
+  # To use the DBAL  implementation, install matiux/broadway-sensitive-serializer-dbal package with composer
   aggregate_keys: broadway_sensitive_serializer.aggregate_keys.dbal
+  #aggregate_keys: broadway_sensitive_serializer.aggregate_keys.in_memory # Default implementation, of little use outside of testing
   data_manager:
-    name: AES256
-    key: null # Encryption key to sensitize data. If null you will need to pass the key at runtime
-    iv: null # Initialization vector. If null it will be generated internally and iv_encoding must be set to true
-    iv_encoding: true # Encrypt the iv and is appends to encrypted value. It makes sense to set it to true if the iv option is set to null
+    name: AES256 # For now, it is the only encryption strategy implemented
+    key: null # Encryption key to sensitize data. If null you will need to pass the key at runtime. This is the convenient way, check out the examples and wiki on main library
+    iv: null # Initialization vector. If null it will be generated internally and iv_encoding must be set to true. This is the convenient way, check out the examples and wiki on main library
+    iv_encoding: true # Encrypt the iv and is appends to encrypted value. It makes sense to set it to true if the iv option is set to null. This is the convenient way, check out the examples and wiki on main library
     #--- Alternatively -----
     #data_manager:
     #  name: AES256
     #  parameters:
     #    AES256:
-    #      key: null # Encryption key to sensitize data. If null you will need to pass the key at runtime
-    #      iv: null # Initialization vector. If null it will be generated internally and iv_encoding must be set to true
-    #      iv_encoding: true # Encrypt the iv and is appends to encrypted value. It makes sense to set it to true if the iv option is set to null
+    #      key: null
+    #      iv: null
+    #      iv_encoding: true
   strategy:
     name: partial
-    aggregate_key_auto_creation: true
-    events:
+    aggregate_key_auto_creation: true # Enable AggregateKey model auto creation. This is the convenient way, check out the examples and wiki on main library
+    events: # List of events supported by the strategy
       - SensitiveUser\User\Domain\Event\AddressAdded:
-        - address
+        - address # List of keys to sensitize
       - SensitiveUser\User\Domain\Event\UserRegistered:
         - name
         - surname
@@ -126,25 +144,26 @@ broadway_sensitive_serializer:
 ```yaml
 broadway_sensitive_serializer:
   aggregate_master_key: 'm4$t3rS3kr3tk31' # Master key to encrypt the keys of aggregates. Get it from an external service or environment variable
-  key_generator: open-ssl
-  #aggregate_keys: broadway_sensitive_serializer.aggregate_keys.in_memory
+  key_generator: open-ssl # For now is the only one generator implemented
+  # To use the DBAL  implementation, install matiux/broadway-sensitive-serializer-dbal package with composer
   aggregate_keys: broadway_sensitive_serializer.aggregate_keys.dbal
+  #aggregate_keys: broadway_sensitive_serializer.aggregate_keys.in_memory # Default implementation, of little use outside of testing
   data_manager:
-    name: AES256
-    key: null # Encryption key to sensitize data. If null you will need to pass the key at runtime
-    iv: null # Initialization vector. If null it will be generated internally and iv_encoding must be set to true
-    iv_encoding: true # Encrypt the iv and is appends to encrypted value. It makes sense to set it to true if the iv option is set to null
+    name: AES256 # For now, it is the only encryption strategy implemented
+    key: null # Encryption key to sensitize data. If null you will need to pass the key at runtime. This is the convenient way, check out the examples and wiki on main library
+    iv: null # Initialization vector. If null it will be generated internally and iv_encoding must be set to true. This is the convenient way, check out the examples and wiki on main library
+    iv_encoding: true # Encrypt the iv and is appends to encrypted value. It makes sense to set it to true if the iv option is set to null. This is the convenient way, check out the examples and wiki on main library
     #--- Alternatively -----
     #data_manager:
     #  name: AES256
     #  parameters:
     #    AES256:
-    #      key: null # Encryption key to sensitize data. If null you will need to pass the key at runtime
-    #      iv: null # Initialization vector. If null it will be generated internally and iv_encoding must be set to true
-    #      iv_encoding: true # Encrypt the iv and is appends to encrypted value. It makes sense to set it to true if the iv option is set to null
+    #      key: null
+    #      iv: null
+    #      iv_encoding: true
   strategy:
     name: custom
-    aggregate_key_auto_creation: true
+    aggregate_key_auto_creation: true # Enable AggregateKey model auto creation. This is the convenient way, check out the examples and wiki on main library
   #--- Alternatively -----
   #strategy:
   #  name: custom

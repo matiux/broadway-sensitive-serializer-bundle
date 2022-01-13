@@ -61,6 +61,7 @@ class Configuration implements ConfigurationInterface
                     ->values([
                         RegisterWholeStrategyCompilerPass::STRATEGY_NAME,
                         RegisterCustomStrategyCompilerPass::STRATEGY_NAME,
+                        RegisterPartialStrategyCompilerPass::STRATEGY_NAME,
                     ])
                     ->isRequired()
                     ->info('Strategy name to sensitize events payload. Use whole, partial or custom.')
@@ -76,6 +77,7 @@ class Configuration implements ConfigurationInterface
         $this->expandParameters($rootNode->find('strategy'));
 
         $this->addWholeStrategyParameters($rootNode);
+        $this->addPartialStrategyParameters($rootNode);
         $this->addCustomStrategyParameters($rootNode);
     }
 
@@ -110,7 +112,30 @@ class Configuration implements ConfigurationInterface
             ->end()
         ->end();
     }
-
+    
+    private function addPartialStrategyParameters(ArrayNodeDefinition $node): void
+    {
+        /** @var ArrayNodeDefinition $strategyParameterNode */
+        $strategyParameterNode = $node->find('strategy.parameters');
+        
+        $strategyParameterNode->children()
+            ->arrayNode(RegisterPartialStrategyCompilerPass::STRATEGY_NAME)
+                ->info('Strategy to sensitize TODO')
+                ->children()
+                    ->booleanNode('aggregate_key_auto_creation')
+                        ->defaultTrue()
+                        ->info('Choose whether to use auto creation for the aggregate_key. Default true')
+                    ->end()
+                    ->arrayNode('events')
+                        ->arrayPrototype()->scalarPrototype()->end()
+                        ->info('List of events to sensitize')
+                        ->isRequired()
+                    ->end()
+                ->end()
+            ->end()
+        ->end();
+    }
+    
     private function addCustomStrategyParameters(ArrayNodeDefinition $node): void
     {
         /** @var ArrayNodeDefinition $strategyParameterNode */

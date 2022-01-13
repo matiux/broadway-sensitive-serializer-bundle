@@ -6,6 +6,7 @@ namespace Matiux\Broadway\SensitiveSerializer\Bundle\SensitiveSerializerBundle;
 
 use Matiux\Broadway\SensitiveSerializer\Bundle\SensitiveSerializerBundle\DependencyInjection\RegisterAggregateKeysCompilerPass;
 use Matiux\Broadway\SensitiveSerializer\Bundle\SensitiveSerializerBundle\DependencyInjection\RegisterCustomStrategyCompilerPass;
+use Matiux\Broadway\SensitiveSerializer\Bundle\SensitiveSerializerBundle\DependencyInjection\RegisterPartialStrategyCompilerPass;
 use Matiux\Broadway\SensitiveSerializer\Bundle\SensitiveSerializerBundle\DependencyInjection\RegisterWholeStrategyCompilerPass;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\HttpKernel\Bundle\Bundle;
@@ -24,6 +25,7 @@ class BroadwaySensitiveSerializerBundle extends Bundle
 
         $container->addCompilerPass(new RegisterAggregateKeysCompilerPass());
         $container->addCompilerPass(new RegisterWholeStrategyCompilerPass());
+        $container->addCompilerPass(new RegisterPartialStrategyCompilerPass());
         $container->addCompilerPass(new RegisterCustomStrategyCompilerPass());
     }
 }

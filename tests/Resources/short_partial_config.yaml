@@ -1,0 +1,18 @@
+broadway_sensitive_serializer:
+  aggregate_master_key: 'm4$t3rS3kr3tk31'
+  aggregate_keys: broadway_sensitive_serializer.aggregate_keys.in_memory
+  key_generator: open-ssl
+  data_manager:
+    name: AES256
+    key: null
+    iv: null
+    iv_encoding: true
+  strategy:
+    name: partial
+    aggregate_key_auto_creation: true
+    events:
+      SensitiveUser\User\Domain\Event\UserRegistered:
+        - email
+        - surname
+      SensitiveUser\User\Domain\Event\AddressAdded:
+        - address
