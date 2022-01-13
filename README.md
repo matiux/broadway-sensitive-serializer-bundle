@@ -33,37 +33,6 @@ composer install
 project phpunit
 ```
 
-### Partial Strategy configuration
-[Read the docs](https://github.com/matiux/broadway-sensitive-serializer/wiki/%5BIT%5D-3.Moduli#partial-strategy)
-```yaml
-broadway_sensitive_serializer:
-  aggregate_master_key: 'm4$t3rS3kr3tk31' # Master key to encrypt the keys of aggregates. Get it from an external service or environment variable
-  key_generator: open-ssl
-  #aggregate_keys: broadway_sensitive_serializer.aggregate_keys.in_memory
-  aggregate_keys: broadway_sensitive_serializer.aggregate_keys.dbal
-  data_manager:
-    name: AES256
-    key: null # Encryption key to sensitize data. If null you will need to pass the key at runtime
-    iv: null # Initialization vector. If null it will be generated internally and iv_encoding must be set to true
-    iv_encoding: true # Encrypt the iv and is appends to encrypted value. It makes sense to set it to true if the iv option is set to null
-    #--- Alternatively -----
-    #data_manager:
-    #  name: AES256
-    #  parameters:
-    #    AES256:
-    #      key: null # Encryption key to sensitize data. If null you will need to pass the key at runtime
-    #      iv: null # Initialization vector. If null it will be generated internally and iv_encoding must be set to true
-    #      iv_encoding: true # Encrypt the iv and is appends to encrypted value. It makes sense to set it to true if the iv option is set to null
-  strategy:
-    name: partial
-    aggregate_key_auto_creation: true
-  #--- Alternatively -----
-  #strategy:
-  #  name: partial
-  #  parameters:
-  #    partial:
-  #      aggregate_key_auto_creation: true
-```
 ### Whole Strategy configuration
 [Read the docs](https://github.com/matiux/broadway-sensitive-serializer/wiki/%5BIT%5D-3.Moduli#whole-strategy)
 ```yaml
@@ -106,4 +75,80 @@ broadway_sensitive_serializer:
   #      events:
   #        - SensitiveUser\User\Domain\Event\AddressAdded
   #        - SensitiveUser\User\Domain\Event\UserRegistered
+```
+
+### Partial Strategy configuration
+[Read the docs](https://github.com/matiux/broadway-sensitive-serializer/wiki/%5BIT%5D-3.Moduli#partial-strategy)
+```yaml
+broadway_sensitive_serializer:
+  aggregate_master_key: 'm4$t3rS3kr3tk31' # Master key to encrypt the keys of aggregates. Get it from an external service or environment variable
+  key_generator: open-ssl
+  #aggregate_keys: broadway_sensitive_serializer.aggregate_keys.in_memory
+  aggregate_keys: broadway_sensitive_serializer.aggregate_keys.dbal
+  data_manager:
+    name: AES256
+    key: null # Encryption key to sensitize data. If null you will need to pass the key at runtime
+    iv: null # Initialization vector. If null it will be generated internally and iv_encoding must be set to true
+    iv_encoding: true # Encrypt the iv and is appends to encrypted value. It makes sense to set it to true if the iv option is set to null
+    #--- Alternatively -----
+    #data_manager:
+    #  name: AES256
+    #  parameters:
+    #    AES256:
+    #      key: null # Encryption key to sensitize data. If null you will need to pass the key at runtime
+    #      iv: null # Initialization vector. If null it will be generated internally and iv_encoding must be set to true
+    #      iv_encoding: true # Encrypt the iv and is appends to encrypted value. It makes sense to set it to true if the iv option is set to null
+  strategy:
+    name: partial
+    aggregate_key_auto_creation: true
+    events:
+      - SensitiveUser\User\Domain\Event\AddressAdded:
+        - address
+      - SensitiveUser\User\Domain\Event\UserRegistered:
+        - name
+        - surname
+  #--- Alternatively -----
+  #strategy:
+  #  name: partial
+  #  parameters:
+  #    partial:
+  #      aggregate_key_auto_creation: true
+  #      events:
+  #        - SensitiveUser\User\Domain\Event\AddressAdded:
+  #           - address
+  #        - SensitiveUser\User\Domain\Event\UserRegistered:
+  #           - name
+  #           - surname
+```
+
+### Custom Strategy configuration
+[Read the docs](https://github.com/matiux/broadway-sensitive-serializer/wiki/%5BIT%5D-3.Moduli#custom-strategy)
+```yaml
+broadway_sensitive_serializer:
+  aggregate_master_key: 'm4$t3rS3kr3tk31' # Master key to encrypt the keys of aggregates. Get it from an external service or environment variable
+  key_generator: open-ssl
+  #aggregate_keys: broadway_sensitive_serializer.aggregate_keys.in_memory
+  aggregate_keys: broadway_sensitive_serializer.aggregate_keys.dbal
+  data_manager:
+    name: AES256
+    key: null # Encryption key to sensitize data. If null you will need to pass the key at runtime
+    iv: null # Initialization vector. If null it will be generated internally and iv_encoding must be set to true
+    iv_encoding: true # Encrypt the iv and is appends to encrypted value. It makes sense to set it to true if the iv option is set to null
+    #--- Alternatively -----
+    #data_manager:
+    #  name: AES256
+    #  parameters:
+    #    AES256:
+    #      key: null # Encryption key to sensitize data. If null you will need to pass the key at runtime
+    #      iv: null # Initialization vector. If null it will be generated internally and iv_encoding must be set to true
+    #      iv_encoding: true # Encrypt the iv and is appends to encrypted value. It makes sense to set it to true if the iv option is set to null
+  strategy:
+    name: custom
+    aggregate_key_auto_creation: true
+  #--- Alternatively -----
+  #strategy:
+  #  name: custom
+  #  parameters:
+  #    custom:
+  #      aggregate_key_auto_creation: true
 ```

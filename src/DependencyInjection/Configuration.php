@@ -60,10 +60,10 @@ class Configuration implements ConfigurationInterface
                     ->enumNode('name')
                     ->values([
                         RegisterWholeStrategyCompilerPass::STRATEGY_NAME,
-                        RegisterPartialStrategyCompilerPass::STRATEGY_NAME,
+                        RegisterCustomStrategyCompilerPass::STRATEGY_NAME,
                     ])
                     ->isRequired()
-                    ->info('Strategy name to sensitize events payload. Use partial or whole.')
+                    ->info('Strategy name to sensitize events payload. Use whole, partial or custom.')
                 ->end()
                 ->arrayNode('parameters')
                     ->info('Configuration for specific strategy.')
@@ -76,7 +76,7 @@ class Configuration implements ConfigurationInterface
         $this->expandParameters($rootNode->find('strategy'));
 
         $this->addWholeStrategyParameters($rootNode);
-        $this->addPartialStrategyParameters($rootNode);
+        $this->addCustomStrategyParameters($rootNode);
     }
 
     private function addWholeStrategyParameters(ArrayNodeDefinition $node): void
@@ -111,13 +111,13 @@ class Configuration implements ConfigurationInterface
         ->end();
     }
 
-    private function addPartialStrategyParameters(ArrayNodeDefinition $node): void
+    private function addCustomStrategyParameters(ArrayNodeDefinition $node): void
     {
         /** @var ArrayNodeDefinition $strategyParameterNode */
         $strategyParameterNode = $node->find('strategy.parameters');
         
         $strategyParameterNode->children()
-            ->arrayNode(RegisterPartialStrategyCompilerPass::STRATEGY_NAME)
+            ->arrayNode(RegisterCustomStrategyCompilerPass::STRATEGY_NAME)
                 ->info('Strategy for payload sensitization in a custom way')
                 ->children()
                     ->booleanNode('aggregate_key_auto_creation')

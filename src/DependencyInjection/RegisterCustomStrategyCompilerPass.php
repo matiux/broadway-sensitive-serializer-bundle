@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace Matiux\Broadway\SensitiveSerializer\Bundle\SensitiveSerializerBundle\DependencyInjection;
 
 use InvalidArgumentException;
-use Matiux\Broadway\SensitiveSerializer\Serializer\Strategy\PartialPayloadStrategy\PartialPayloadSensitizerRegistry;
+use Matiux\Broadway\SensitiveSerializer\Serializer\Strategy\CustomStrategy\CustomPayloadSensitizerRegistry;
 use Matiux\Broadway\SensitiveSerializer\Serializer\Strategy\PayloadSensitizer;
 use ReflectionClass;
 use ReflectionException;
@@ -13,9 +13,9 @@ use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Definition;
 use Symfony\Component\DependencyInjection\Reference;
 
-class RegisterPartialStrategyCompilerPass extends RegisterStrategyCompilerPass
+class RegisterCustomStrategyCompilerPass extends RegisterStrategyCompilerPass
 {
-    public const STRATEGY_NAME = 'partial';
+    public const STRATEGY_NAME = 'custom';
 
     protected function strategyName(): string
     {
@@ -31,7 +31,7 @@ class RegisterPartialStrategyCompilerPass extends RegisterStrategyCompilerPass
     {
         $this->registerRegistry($container);
 
-        $container->setAlias('broadway_sensitive_serializer.strategy', 'broadway_sensitive_serializer.strategy.partial');
+        $container->setAlias('broadway_sensitive_serializer.strategy', 'broadway_sensitive_serializer.strategy.custom');
     }
 
     /**
@@ -44,7 +44,7 @@ class RegisterPartialStrategyCompilerPass extends RegisterStrategyCompilerPass
         $serializers = [];
 
         /** @var PayloadSensitizer[] $a */
-        $sensitizers = $container->findTaggedServiceIds('broadway.sensitive_serializer.partial');
+        $sensitizers = $container->findTaggedServiceIds('broadway.sensitive_serializer.custom');
 
         /**
          * @var class-string $id
@@ -68,10 +68,10 @@ class RegisterPartialStrategyCompilerPass extends RegisterStrategyCompilerPass
             $serializers[] = new Reference($id);
         }
 
-        $definition = new Definition(PartialPayloadSensitizerRegistry::class, [
+        $definition = new Definition(CustomPayloadSensitizerRegistry::class, [
             $serializers,
         ]);
 
-        $container->setDefinition('broadway_sensitive_serializer.strategy.partial.registry', $definition);
+        $container->setDefinition('broadway_sensitive_serializer.strategy.custom.registry', $definition);
     }
 }

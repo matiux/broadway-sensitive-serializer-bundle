@@ -1,7 +1,7 @@
 services:
 
   broadway_sensitive_serializer.strategy.whole.sensitizer:
-    class: Matiux\Broadway\SensitiveSerializer\Serializer\Strategy\WholePayloadStrategy\WholePayloadSensitizer
+    class: Matiux\Broadway\SensitiveSerializer\Serializer\Strategy\WholeStrategy\WholePayloadSensitizer
     arguments:
       $sensitiveDataManager: '@broadway_sensitive_serializer.data_manager'
       $aggregateKeyManager: '@broadway_sensitive_serializer.aggregate_key_manager'
@@ -10,7 +10,7 @@ services:
       $excludedIdKey: '%matiux.broadway.sensitive_serializer.strategy.excluded_id_key%'
 
   broadway_sensitive_serializer.strategy.whole:
-    class: Matiux\Broadway\SensitiveSerializer\Serializer\Strategy\WholePayloadStrategy\WholePayloadSensitizerStrategy
+    class: Matiux\Broadway\SensitiveSerializer\Serializer\Strategy\WholeStrategy\WholeStrategy
     arguments:
       $wholePayloadSensitizerRegistry: '@broadway_sensitive_serializer.strategy.whole.registry'
       $wholePayloadSensitizer: '@broadway_sensitive_serializer.strategy.whole.sensitizer'

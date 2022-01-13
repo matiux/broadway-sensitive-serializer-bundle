@@ -24,10 +24,10 @@ class StrategyExtensionTest extends AbstractExtensionTestCase
      */
     public function it_registers_whole_strategy_when_configured(): void
     {
-        $shortPartialConfig = (array) Yaml::parseFile(Path::testResources().'/short_whole_config.yaml');
+        $shortWholeConfig = (array) Yaml::parseFile(Path::testResources().'/short_whole_config.yaml');
 
         $this->load(
-            (array) $shortPartialConfig[(string) array_key_first($shortPartialConfig)]
+            (array) $shortWholeConfig[(string) array_key_first($shortWholeConfig)]
         );
 
         $this->assertContainerBuilderHasParameter(
@@ -57,12 +57,12 @@ class StrategyExtensionTest extends AbstractExtensionTestCase
     /**
      * @test
      */
-    public function it_registers_partial_strategy_when_configured(): void
+    public function it_registers_custom_strategy_when_configured(): void
     {
-        $shortPartialConfig = (array) Yaml::parseFile(Path::testResources().'/short_partial_config.yaml');
+        $shortCustomConfig = (array) Yaml::parseFile(Path::testResources().'/short_custom_config.yaml');
 
         $this->load(
-            (array) $shortPartialConfig[(string) array_key_first($shortPartialConfig)]
+            (array) $shortCustomConfig[(string) array_key_first($shortCustomConfig)]
         );
 
         $this->assertContainerBuilderHasParameter(

@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Matiux\Broadway\SensitiveSerializer\Bundle\SensitiveSerializerBundle\DependencyInjection;
 
 use Exception;
+use LogicException;
 use Symfony\Component\Config\FileLocator;
 use Symfony\Component\Config\Loader\LoaderResolver;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
@@ -59,7 +60,7 @@ class BroadwaySensitiveSerializerExtension extends ConfigurableExtension
 
                 break;
             default:
-                throw new \LogicException('Invalid key generator strategy');
+                throw new LogicException('Invalid key generator strategy');
         }
     }
 
@@ -73,7 +74,7 @@ class BroadwaySensitiveSerializerExtension extends ConfigurableExtension
 
                 break;
             default:
-                throw new \LogicException('Invalid data manager');
+                throw new LogicException('Invalid data manager');
         }
     }
 
@@ -111,12 +112,12 @@ class BroadwaySensitiveSerializerExtension extends ConfigurableExtension
                 $this->bindWholeStrategy($config, $container);
 
                 break;
-            case RegisterPartialStrategyCompilerPass::STRATEGY_NAME:
-                $this->bindPartialStrategy($config, $container);
+            case RegisterCustomStrategyCompilerPass::STRATEGY_NAME:
+                $this->bindCustomStrategy($config, $container);
 
                 break;
             default:
-                throw new \LogicException('Invalid strategy');
+                throw new LogicException('Invalid strategy');
         }
     }
 
@@ -149,17 +150,17 @@ class BroadwaySensitiveSerializerExtension extends ConfigurableExtension
         );
     }
 
-    private function bindPartialStrategy(array $config, ContainerBuilder $container): void
+    private function bindCustomStrategy(array $config, ContainerBuilder $container): void
     {
         Assert::isArray($config['strategy']);
         Assert::isArray($config['strategy']['parameters']);
 
-        /** @var array{aggregate_key_auto_creation: bool} $partialStrategyConfig */
-        $partialStrategyConfig = $config['strategy']['parameters'][RegisterPartialStrategyCompilerPass::STRATEGY_NAME];
+        /** @var array{aggregate_key_auto_creation: bool} $customStrategyConfig */
+        $customStrategyConfig = $config['strategy']['parameters'][RegisterCustomStrategyCompilerPass::STRATEGY_NAME];
 
         $container->setParameter(
             'matiux.broadway.sensitive_serializer.strategy.aggregate_key_auto_creation',
-            $partialStrategyConfig['aggregate_key_auto_creation']
+            $customStrategyConfig['aggregate_key_auto_creation']
         );
     }
 }
