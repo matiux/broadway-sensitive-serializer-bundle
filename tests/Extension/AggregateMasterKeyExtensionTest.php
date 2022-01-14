@@ -23,10 +23,10 @@ class AggregateMasterKeyExtensionTest extends AbstractExtensionTestCase
      */
     public function it_registers_the_aggregate_master_key_parameter_when_configured(): void
     {
-        $shortPartialConfig = (array) Yaml::parseFile(Path::testResources().'/short_partial_config.yaml');
+        $shortCustomConfig = (array) Yaml::parseFile(Path::testResources().'/short_custom_config.yaml');
 
         $this->load(
-            (array) $shortPartialConfig[(string) array_key_first($shortPartialConfig)]
+            (array) $shortCustomConfig[(string) array_key_first($shortCustomConfig)]
         );
 
         $this->assertContainerBuilderHasParameter(

@@ -10,7 +10,7 @@ broadway_sensitive_serializer:
         iv: null
         iv_encoding: true
   strategy:
-    name: partial
+    name: custom
     parameters:
-      partial:
+      custom:
         aggregate_key_auto_creation: true

@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Test\Matiux\Broadway\SensitiveSerializer\Bundle\SensitiveSerializerBundle\Extension;
 
 use Matiux\Broadway\SensitiveSerializer\Bundle\SensitiveSerializerBundle\DependencyInjection\BroadwaySensitiveSerializerExtension;
+use Matiux\Broadway\SensitiveSerializer\Bundle\SensitiveSerializerBundle\DependencyInjection\RegisterPartialStrategyCompilerPass;
 use Matiux\Broadway\SensitiveSerializer\Bundle\SensitiveSerializerBundle\DependencyInjection\RegisterWholeStrategyCompilerPass;
 use Matthias\SymfonyDependencyInjectionTest\PhpUnit\AbstractExtensionTestCase;
 use Symfony\Component\Yaml\Yaml;
@@ -24,10 +25,10 @@ class StrategyExtensionTest extends AbstractExtensionTestCase
      */
     public function it_registers_whole_strategy_when_configured(): void
     {
-        $shortPartialConfig = (array) Yaml::parseFile(Path::testResources().'/short_whole_config.yaml');
+        $shortWholeConfig = (array) Yaml::parseFile(Path::testResources().'/short_whole_config.yaml');
 
         $this->load(
-            (array) $shortPartialConfig[(string) array_key_first($shortPartialConfig)]
+            (array) $shortWholeConfig[(string) array_key_first($shortWholeConfig)]
         );
 
         $this->assertContainerBuilderHasParameter(
@@ -63,6 +64,31 @@ class StrategyExtensionTest extends AbstractExtensionTestCase
 
         $this->load(
             (array) $shortPartialConfig[(string) array_key_first($shortPartialConfig)]
+        );
+
+        $this->assertContainerBuilderHasParameter(
+            'matiux.broadway.sensitive_serializer.strategy.aggregate_key_auto_creation',
+            true
+        );
+
+        $this->assertContainerBuilderHasParameter(
+            RegisterPartialStrategyCompilerPass::STRATEGY_PARTIAL_EVENTS_PARAMETER,
+            [
+                'SensitiveUser\User\Domain\Event\UserRegistered' => ['email', 'surname'],
+                'SensitiveUser\User\Domain\Event\AddressAdded' => ['address'],
+            ]
+        );
+    }
+
+    /**
+     * @test
+     */
+    public function it_registers_custom_strategy_when_configured(): void
+    {
+        $shortCustomConfig = (array) Yaml::parseFile(Path::testResources().'/short_custom_config.yaml');
+
+        $this->load(
+            (array) $shortCustomConfig[(string) array_key_first($shortCustomConfig)]
         );
 
         $this->assertContainerBuilderHasParameter(

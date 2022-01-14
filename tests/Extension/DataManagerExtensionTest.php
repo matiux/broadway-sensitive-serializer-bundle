@@ -25,10 +25,10 @@ class DataManagerExtensionTest extends AbstractExtensionTestCase
      */
     public function it_registers_the_data_manager_service_when_configured(): void
     {
-        $shortPartialConfig = (array) Yaml::parseFile(Path::testResources().'/short_partial_config.yaml');
+        $shortCustomConfig = (array) Yaml::parseFile(Path::testResources().'/short_custom_config.yaml');
 
         $this->load(
-            (array) $shortPartialConfig[(string) array_key_first($shortPartialConfig)]
+            (array) $shortCustomConfig[(string) array_key_first($shortCustomConfig)]
         );
 
         $this->assertContainerBuilderHasParameter('matiux.broadway.sensitive_serializer.key', null);
@@ -54,13 +54,13 @@ class DataManagerExtensionTest extends AbstractExtensionTestCase
         self::expectException(InvalidConfigurationException::class);
         self::expectExceptionMessage('Unrecognized option "md5" under "broadway_sensitive_serializer.data_manager.parameters');
 
-        $shortPartialConfig = (array) Yaml::parseFile(Path::testResources().'/short_partial_config.yaml');
-        $shortPartialConfig = (array) $shortPartialConfig[(string) array_key_first($shortPartialConfig)];
+        $shortCustomConfig = (array) Yaml::parseFile(Path::testResources().'/short_custom_config.yaml');
+        $shortCustomConfig = (array) $shortCustomConfig[(string) array_key_first($shortCustomConfig)];
 
-        self::assertIsArray($shortPartialConfig['data_manager']);
+        self::assertIsArray($shortCustomConfig['data_manager']);
 
-        $shortPartialConfig['data_manager']['name'] = 'md5';
+        $shortCustomConfig['data_manager']['name'] = 'md5';
 
-        $this->load($shortPartialConfig);
+        $this->load($shortCustomConfig);
     }
 }
