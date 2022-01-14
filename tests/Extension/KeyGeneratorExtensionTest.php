@@ -25,10 +25,10 @@ class KeyGeneratorExtensionTest extends AbstractExtensionTestCase
      */
     public function it_registers_the_key_generator_service_when_configured(): void
     {
-        $shortPartialConfig = (array) Yaml::parseFile(Path::testResources().'/short_partial_config.yaml');
+        $shortCustomConfig = (array) Yaml::parseFile(Path::testResources().'/short_custom_config.yaml');
 
         $this->load(
-            (array) $shortPartialConfig[(string) array_key_first($shortPartialConfig)]
+            (array) $shortCustomConfig[(string) array_key_first($shortCustomConfig)]
         );
 
         $this->assertContainerBuilderHasAlias(
@@ -52,10 +52,10 @@ class KeyGeneratorExtensionTest extends AbstractExtensionTestCase
             'The value "md5" is not allowed for path "broadway_sensitive_serializer.key_generator". Permissible values: "open-ssl"'
         );
 
-        $shortPartialConfig = (array) Yaml::parseFile(Path::testResources().'/short_partial_config.yaml');
-        $shortPartialConfig = (array) $shortPartialConfig[(string) array_key_first($shortPartialConfig)];
-        $shortPartialConfig['key_generator'] = 'md5';
+        $shortCustomConfig = (array) Yaml::parseFile(Path::testResources().'/short_custom_config.yaml');
+        $shortCustomConfig = (array) $shortCustomConfig[(string) array_key_first($shortCustomConfig)];
+        $shortCustomConfig['key_generator'] = 'md5';
 
-        $this->load($shortPartialConfig);
+        $this->load($shortCustomConfig);
     }
 }

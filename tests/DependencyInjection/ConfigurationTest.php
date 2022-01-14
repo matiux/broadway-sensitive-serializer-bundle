@@ -25,7 +25,7 @@ class ConfigurationTest extends AbstractExtensionConfigurationTestCase
     /**
      * @test
      */
-    public function it_process_short_partial_configuration(): void
+    public function it_process_short_custom_configuration(): void
     {
         $this->assertProcessedConfigurationEquals(
             [
@@ -43,16 +43,16 @@ class ConfigurationTest extends AbstractExtensionConfigurationTestCase
                     ],
                 ],
                 'strategy' => [
-                    'name' => 'partial',
+                    'name' => 'custom',
                     'parameters' => [
-                        'partial' => [
+                        'custom' => [
                             'aggregate_key_auto_creation' => true,
                         ],
                     ],
                 ],
             ],
             [
-                Path::testResources().'/short_partial_config.yaml',
+                Path::testResources().'/short_custom_config.yaml',
             ]
         );
     }
@@ -121,9 +121,9 @@ class ConfigurationTest extends AbstractExtensionConfigurationTestCase
                     ],
                 ],
                 'strategy' => [
-                    'name' => 'partial',
+                    'name' => 'custom',
                     'parameters' => [
-                        'partial' => [
+                        'custom' => [
                             'aggregate_key_auto_creation' => true,
                         ],
                     ],

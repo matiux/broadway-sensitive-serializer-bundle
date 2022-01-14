@@ -4,14 +4,11 @@ declare(strict_types=1);
 
 namespace Test\Matiux\Broadway\SensitiveSerializer\Bundle\SensitiveSerializerBundle\DependencyInjection\CompilerPass;
 
-use InvalidArgumentException;
+use LogicException;
 use Matiux\Broadway\SensitiveSerializer\Bundle\SensitiveSerializerBundle\DependencyInjection\RegisterPartialStrategyCompilerPass;
 use Matiux\Broadway\SensitiveSerializer\Bundle\SensitiveSerializerBundle\DependencyInjection\RegisterStrategyCompilerPass;
-use Matiux\Broadway\SensitiveSerializer\Serializer\Strategy\PayloadSensitizer;
 use Matthias\SymfonyDependencyInjectionTest\PhpUnit\AbstractCompilerPassTestCase;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
-use Symfony\Component\DependencyInjection\Definition;
-use Symfony\Component\DependencyInjection\Reference;
 
 class RegisterPartialStrategyCompilerPassTest extends AbstractCompilerPassTestCase
 {
@@ -33,21 +30,17 @@ class RegisterPartialStrategyCompilerPassTest extends AbstractCompilerPassTestCa
     /**
      * @test
      */
-    public function it_throws_when_partial_sensitizer_is_not_subclass_of_abstract_parent_class(): void
+    public function it_throws_when_events_are_not_set(): void
     {
-        self::expectException(InvalidArgumentException::class);
+        self::expectException(LogicException::class);
         self::expectExceptionMessage(
-            sprintf('Service "%s" must extend abstract class "%s".', 'my_sensitizer', PayloadSensitizer::class)
+            sprintf('`%s` is not set', RegisterPartialStrategyCompilerPass::STRATEGY_PARTIAL_EVENTS_PARAMETER)
         );
 
         $this->container->setParameter(
             RegisterStrategyCompilerPass::STRATEGY_ID,
             RegisterPartialStrategyCompilerPass::STRATEGY_NAME
         );
-
-        $mySensitizer = new Definition(\stdClass::class);
-        $mySensitizer->addTag('broadway.sensitive_serializer.partial');
-        $this->setDefinition('my_sensitizer', $mySensitizer);
 
         $this->compile();
     }
@@ -61,42 +54,22 @@ class RegisterPartialStrategyCompilerPassTest extends AbstractCompilerPassTestCa
             RegisterStrategyCompilerPass::STRATEGY_ID,
             RegisterPartialStrategyCompilerPass::STRATEGY_NAME
         );
-
-        $mySensitizer = new Definition(MyPartialSensitizer::class);
-        $mySensitizer->addTag('broadway.sensitive_serializer.partial');
-        $this->setDefinition('my_sensitizer', $mySensitizer);
+        $this->container->setParameter(
+            RegisterPartialStrategyCompilerPass::STRATEGY_PARTIAL_EVENTS_PARAMETER,
+            ['Event\Registered']
+        );
 
         $this->compile();
 
         $this->assertContainerBuilderHasServiceDefinitionWithArgument(
             'broadway_sensitive_serializer.strategy.partial.registry',
             0,
-            [
-                new Reference('my_sensitizer'),
-            ]
+            ['Event\Registered']
         );
 
         $this->assertContainerBuilderHasAlias(
             'broadway_sensitive_serializer.strategy',
             'broadway_sensitive_serializer.strategy.partial'
         );
-    }
-}
-
-class MyPartialSensitizer extends PayloadSensitizer
-{
-    protected function generateSensitizedPayload(string $decryptedAggregateKey): array
-    {
-        return [];
-    }
-
-    protected function generateDesensitizedPayload(string $decryptedAggregateKey): array
-    {
-        return [];
-    }
-
-    public function supports($subject): bool
-    {
-        return true;
     }
 }

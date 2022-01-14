@@ -1,0 +1,5 @@
+services:
+  broadway_sensitive_serializer.strategy.custom:
+    class: Matiux\Broadway\SensitiveSerializer\Serializer\Strategy\CustomStrategy\CustomStrategy
+    arguments:
+      $customPayloadSensitizerRegistry: '@broadway_sensitive_serializer.strategy.custom.registry'
