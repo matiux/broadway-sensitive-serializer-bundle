@@ -22,6 +22,9 @@ class RegisterAggregateKeysCompilerPass extends CompilerPass
             return;
         }
 
+        /**
+         * @psalm-suppress UndefinedDocblockClass
+         */
         $serviceId = $container->getParameter($serviceParameter);
 
         Assert::string($serviceId);

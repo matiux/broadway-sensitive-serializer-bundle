@@ -27,6 +27,9 @@ class RegisterPartialStrategyCompilerPass extends RegisterStrategyCompilerPass
             throw new LogicException(sprintf('`%s` is not set', self::STRATEGY_PARTIAL_EVENTS_PARAMETER));
         }
 
+        /**
+         * @psalm-suppress UndefinedDocblockClass
+         */
         $events = $container->getParameter(self::STRATEGY_PARTIAL_EVENTS_PARAMETER);
 
         $definition = new Definition(PartialPayloadSensitizerRegistry::class, [

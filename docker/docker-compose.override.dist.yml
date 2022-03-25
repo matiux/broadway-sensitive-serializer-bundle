@@ -1,12 +1,12 @@
-version: '3.8'
+version: '3.9'
 
 secrets:
   id_rsa:
-    file:
+    file: ~/.ssh/id_rsa
   id_rsa.pub:
-    file:
+    file: ~/.ssh/id_rsa.pub
   known_hosts:
-    file:
+    file: ~/.ssh/known_hosts
 
 services:
 
