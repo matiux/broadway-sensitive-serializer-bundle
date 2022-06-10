@@ -45,6 +45,11 @@ class RegisterCustomStrategyCompilerPassTest extends AbstractCompilerPassTestCas
             RegisterCustomStrategyCompilerPass::STRATEGY_NAME
         );
 
+        $this->container->setParameter(
+            'matiux.broadway.sensitive_serializer.strategy.value_serializer',
+            'json'
+        );
+
         $mySensitizer = new Definition(\stdClass::class);
         $mySensitizer->addTag('broadway.sensitive_serializer.custom');
         $this->setDefinition('my_sensitizer', $mySensitizer);
@@ -60,6 +65,11 @@ class RegisterCustomStrategyCompilerPassTest extends AbstractCompilerPassTestCas
         $this->container->setParameter(
             RegisterStrategyCompilerPass::STRATEGY_ID,
             RegisterCustomStrategyCompilerPass::STRATEGY_NAME
+        );
+
+        $this->container->setParameter(
+            'matiux.broadway.sensitive_serializer.strategy.value_serializer',
+            'json'
         );
 
         $mySensitizer = new Definition(MyCustomSensitizer::class);
@@ -80,17 +90,22 @@ class RegisterCustomStrategyCompilerPassTest extends AbstractCompilerPassTestCas
             'broadway_sensitive_serializer.strategy',
             'broadway_sensitive_serializer.strategy.custom'
         );
+
+        $this->assertContainerBuilderHasAlias(
+            'broadway_sensitive_serializer.strategy.value_serializer',
+            'broadway_sensitive_serializer.strategy.value_serializer.json'
+        );
     }
 }
 
 class MyCustomSensitizer extends PayloadSensitizer
 {
-    protected function generateSensitizedPayload(string $decryptedAggregateKey): array
+    protected function generateSensitizedPayload(): array
     {
         return [];
     }
 
-    protected function generateDesensitizedPayload(string $decryptedAggregateKey): array
+    protected function generateDesensitizedPayload(): array
     {
         return [];
     }

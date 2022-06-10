@@ -3,7 +3,7 @@
 check_code_style() {
 
   # Formattazione del codice con PHP CS Fixer
-  ./dc coding-standard-check-staged
+  ./dc coding-standard-fix-all
   STATUS=$?
 
   if [[ "$STATUS" -eq 0 ]]; then

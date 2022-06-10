@@ -130,12 +130,17 @@ class BroadwaySensitiveSerializerExtension extends ConfigurableExtension
         Assert::isArray($config['strategy']);
         Assert::isArray($config['strategy']['parameters']);
 
-        /** @var array{aggregate_key_auto_creation: bool, excluded_keys: list<string>, excluded_id_key: string, events: list<string>} $wholeStrategyConfig */
+        /** @var array{aggregate_key_auto_creation: bool, value_serializer: string, excluded_keys: list<string>, excluded_id_key: string, events: list<string>} $wholeStrategyConfig */
         $wholeStrategyConfig = $config['strategy']['parameters'][RegisterWholeStrategyCompilerPass::STRATEGY_NAME];
 
         $container->setParameter(
             'matiux.broadway.sensitive_serializer.strategy.aggregate_key_auto_creation',
             $wholeStrategyConfig['aggregate_key_auto_creation']
+        );
+
+        $container->setParameter(
+            'matiux.broadway.sensitive_serializer.strategy.value_serializer',
+            $wholeStrategyConfig['value_serializer']
         );
 
         $container->setParameter(
@@ -159,12 +164,17 @@ class BroadwaySensitiveSerializerExtension extends ConfigurableExtension
         Assert::isArray($config['strategy']);
         Assert::isArray($config['strategy']['parameters']);
 
-        /** @var array{aggregate_key_auto_creation: bool, events: list<string>} $partialStrategyConfig */
+        /** @var array{aggregate_key_auto_creation: bool, value_serializer: string, events: list<string>} $partialStrategyConfig */
         $partialStrategyConfig = $config['strategy']['parameters'][RegisterPartialStrategyCompilerPass::STRATEGY_NAME];
 
         $container->setParameter(
             'matiux.broadway.sensitive_serializer.strategy.aggregate_key_auto_creation',
             $partialStrategyConfig['aggregate_key_auto_creation']
+        );
+
+        $container->setParameter(
+            'matiux.broadway.sensitive_serializer.strategy.value_serializer',
+            $partialStrategyConfig['value_serializer']
         );
 
         $container->setParameter(
@@ -178,12 +188,17 @@ class BroadwaySensitiveSerializerExtension extends ConfigurableExtension
         Assert::isArray($config['strategy']);
         Assert::isArray($config['strategy']['parameters']);
 
-        /** @var array{aggregate_key_auto_creation: bool} $customStrategyConfig */
+        /** @var array{aggregate_key_auto_creation: bool, value_serializer: string} $customStrategyConfig */
         $customStrategyConfig = $config['strategy']['parameters'][RegisterCustomStrategyCompilerPass::STRATEGY_NAME];
 
         $container->setParameter(
             'matiux.broadway.sensitive_serializer.strategy.aggregate_key_auto_creation',
             $customStrategyConfig['aggregate_key_auto_creation']
+        );
+
+        $container->setParameter(
+            'matiux.broadway.sensitive_serializer.strategy.value_serializer',
+            $customStrategyConfig['value_serializer']
         );
     }
 }

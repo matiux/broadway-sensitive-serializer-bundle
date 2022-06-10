@@ -37,7 +37,7 @@ class Configuration implements ConfigurationInterface
             $rootNode = $treeBuilder->getRootNode();
         } elseif (method_exists($treeBuilder, 'root')) {
             /**
-             * BC layer for symfony/config 4.1 and older.
+             * BC layer for symfony/config 4.1 and older
              *
              * @var ArrayNodeDefinition|NodeDefinition
              */
@@ -94,6 +94,12 @@ class Configuration implements ConfigurationInterface
                         ->defaultTrue()
                         ->info('Choose whether to use auto creation for the aggregate_key. Default true')
                     ->end()
+                    ->enumNode('value_serializer')
+                        ->values(['json'])
+                        ->isRequired()
+                        ->defaultValue('json')
+                        ->info("Strategy to serialize payload's values. Default json")
+                    ->end()
                     ->scalarNode('excluded_id_key')
                         ->defaultValue('id')
                         ->info('The key to the id to be excluded from sensitization. Default `id`')
@@ -126,6 +132,12 @@ class Configuration implements ConfigurationInterface
                         ->defaultTrue()
                         ->info('Choose whether to use auto creation for the aggregate_key. Default true')
                     ->end()
+                    ->enumNode('value_serializer')
+                        ->values(['json'])
+                        ->isRequired()
+                        ->defaultValue('json')
+                        ->info("Strategy to serialize payload's values. Default json")
+                    ->end()
                     ->arrayNode('events')
                         ->arrayPrototype()->scalarPrototype()->end()
                         ->info('List of events to sensitize')
@@ -148,6 +160,12 @@ class Configuration implements ConfigurationInterface
                     ->booleanNode('aggregate_key_auto_creation')
                         ->defaultTrue()
                         ->info('Choose whether to use auto creation for the aggregate_key. Default true')
+                    ->end()
+                    ->enumNode('value_serializer')
+                        ->values(['json'])
+                        ->isRequired()
+                        ->defaultValue('json')
+                        ->info("Strategy to serialize payload's values. Default json")
                     ->end()
                 ->end()
             ->end()
