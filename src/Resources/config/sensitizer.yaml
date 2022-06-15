@@ -5,7 +5,7 @@ services:
     public: false
 
   broadway_sensitive_serializer.strategy.value_serializer.json:
-    class: Matiux\Broadway\SensitiveSerializer\Serializer\ValueSerializer\JsonDecodeValueSerializer
+    class: Matiux\Broadway\SensitiveSerializer\Serializer\ValueSerializer\JsonValueSerializer
 
   Matiux\Broadway\SensitiveSerializer\Serializer\Strategy\PayloadSensitizer:
     abstract:  true
