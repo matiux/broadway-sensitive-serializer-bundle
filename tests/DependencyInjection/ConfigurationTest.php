@@ -47,6 +47,7 @@ class ConfigurationTest extends AbstractExtensionConfigurationTestCase
                     'parameters' => [
                         'custom' => [
                             'aggregate_key_auto_creation' => true,
+                            'value_serializer' => 'json',
                         ],
                     ],
                 ],
@@ -82,6 +83,7 @@ class ConfigurationTest extends AbstractExtensionConfigurationTestCase
                     'parameters' => [
                         'whole' => [
                             'aggregate_key_auto_creation' => true,
+                            'value_serializer' => 'json',
                             'excluded_id_key' => 'id',
                             'excluded_keys' => [
                                 'occurred_at',
@@ -96,6 +98,51 @@ class ConfigurationTest extends AbstractExtensionConfigurationTestCase
             ],
             [
                 Path::testResources().'/short_whole_config.yaml',
+            ]
+        );
+    }
+
+    /**
+     * @test
+     */
+    public function it_process_short_partial_configuration(): void
+    {
+        $this->assertProcessedConfigurationEquals(
+            [
+                'aggregate_master_key' => 'm4$t3rS3kr3tk31',
+                'key_generator' => 'open-ssl',
+                'aggregate_keys' => 'broadway_sensitive_serializer.aggregate_keys.in_memory',
+                'data_manager' => [
+                    'name' => 'AES256',
+                    'parameters' => [
+                        'AES256' => [
+                            'key' => null,
+                            'iv' => null,
+                            'iv_encoding' => true,
+                        ],
+                    ],
+                ],
+                'strategy' => [
+                    'name' => 'partial',
+                    'parameters' => [
+                        'partial' => [
+                            'aggregate_key_auto_creation' => true,
+                            'value_serializer' => 'json',
+                            'events' => [
+                                'SensitiveUser\User\Domain\Event\AddressAdded' => [
+                                    'address',
+                                ],
+                                'SensitiveUser\User\Domain\Event\UserRegistered' => [
+                                    'email',
+                                    'surname',
+                                ],
+                            ],
+                        ],
+                    ],
+                ],
+            ],
+            [
+                Path::testResources().'/short_partial_config.yaml',
             ]
         );
     }
@@ -125,6 +172,7 @@ class ConfigurationTest extends AbstractExtensionConfigurationTestCase
                     'parameters' => [
                         'custom' => [
                             'aggregate_key_auto_creation' => true,
+                            'value_serializer' => 'json',
                         ],
                     ],
                 ],

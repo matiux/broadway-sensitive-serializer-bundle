@@ -3,7 +3,10 @@
 declare(strict_types=1);
 
 $finder = PhpCsFixer\Finder::create()
-    ->in([realpath(__DIR__.'/../../src'), realpath(__DIR__.'/../../tests')])
+    ->in([
+        realpath(__DIR__.'/../../src'),
+        realpath(__DIR__.'/../../tests')
+    ])
     //->exclude(['dir'])
     ->notPath('DependencyInjection/Configuration.php');
 

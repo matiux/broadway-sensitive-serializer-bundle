@@ -10,3 +10,4 @@ broadway_sensitive_serializer:
   strategy:
     name: custom
     aggregate_key_auto_creation: true
+    value_serializer: json
