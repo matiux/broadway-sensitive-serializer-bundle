@@ -42,6 +42,11 @@ class RegisterPartialStrategyCompilerPassTest extends AbstractCompilerPassTestCa
             RegisterPartialStrategyCompilerPass::STRATEGY_NAME
         );
 
+        $this->container->setParameter(
+            'matiux.broadway.sensitive_serializer.strategy.value_serializer',
+            'json'
+        );
+
         $this->compile();
     }
 
@@ -54,9 +59,15 @@ class RegisterPartialStrategyCompilerPassTest extends AbstractCompilerPassTestCa
             RegisterStrategyCompilerPass::STRATEGY_ID,
             RegisterPartialStrategyCompilerPass::STRATEGY_NAME
         );
+
         $this->container->setParameter(
             RegisterPartialStrategyCompilerPass::STRATEGY_PARTIAL_EVENTS_PARAMETER,
             ['Event\Registered']
+        );
+
+        $this->container->setParameter(
+            'matiux.broadway.sensitive_serializer.strategy.value_serializer',
+            'json'
         );
 
         $this->compile();
@@ -70,6 +81,11 @@ class RegisterPartialStrategyCompilerPassTest extends AbstractCompilerPassTestCa
         $this->assertContainerBuilderHasAlias(
             'broadway_sensitive_serializer.strategy',
             'broadway_sensitive_serializer.strategy.partial'
+        );
+
+        $this->assertContainerBuilderHasAlias(
+            'broadway_sensitive_serializer.strategy.value_serializer',
+            'broadway_sensitive_serializer.strategy.value_serializer.json'
         );
     }
 }

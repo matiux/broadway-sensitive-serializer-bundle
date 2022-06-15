@@ -4,9 +4,13 @@ services:
     autoconfigure: true
     public: false
 
+  broadway_sensitive_serializer.strategy.value_serializer.json:
+    class: Matiux\Broadway\SensitiveSerializer\Serializer\ValueSerializer\JsonValueSerializer
+
   Matiux\Broadway\SensitiveSerializer\Serializer\Strategy\PayloadSensitizer:
     abstract:  true
     arguments:
       $sensitiveDataManager: '@broadway_sensitive_serializer.data_manager'
       $aggregateKeyManager: '@broadway_sensitive_serializer.aggregate_key_manager'
+      $valueSerializer: '@broadway_sensitive_serializer.strategy.value_serializer'
       $automaticAggregateKeyCreation: '%matiux.broadway.sensitive_serializer.strategy.aggregate_key_auto_creation%'

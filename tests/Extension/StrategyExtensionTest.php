@@ -53,6 +53,11 @@ class StrategyExtensionTest extends AbstractExtensionTestCase
                 'SensitiveUser\User\Domain\Event\UserRegistered',
             ]
         );
+
+        $this->assertContainerBuilderHasParameter(
+            'matiux.broadway.sensitive_serializer.strategy.value_serializer',
+            'json'
+        );
     }
 
     /**
@@ -78,6 +83,11 @@ class StrategyExtensionTest extends AbstractExtensionTestCase
                 'SensitiveUser\User\Domain\Event\AddressAdded' => ['address'],
             ]
         );
+
+        $this->assertContainerBuilderHasParameter(
+            'matiux.broadway.sensitive_serializer.strategy.value_serializer',
+            'json'
+        );
     }
 
     /**
@@ -97,5 +107,10 @@ class StrategyExtensionTest extends AbstractExtensionTestCase
         );
 
         self::assertFalse($this->container->hasParameter('matiux.broadway.sensitive_serializer.strategy.excluded_keys'));
+
+        $this->assertContainerBuilderHasParameter(
+            'matiux.broadway.sensitive_serializer.strategy.value_serializer',
+            'json'
+        );
     }
 }

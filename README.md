@@ -74,6 +74,7 @@ broadway_sensitive_serializer:
   strategy:
     name: whole
     aggregate_key_auto_creation: true # Enable AggregateKey model auto creation. This is the convenient way, check out the examples and wiki on main library
+    value_serializer: json # Strategy to serialize payload's values. Default json
     excluded_id_key: id # The key of the aggregate id which should not be encrypted
     excluded_keys: # List of keys to be excluded from encryption
       - occurred_at
@@ -86,6 +87,7 @@ broadway_sensitive_serializer:
   #  parameters:
   #    whole:
   #      aggregate_key_auto_creation: true
+  #      value_serializer: json
   #      excluded_id_key: id
   #      excluded_keys:
   #        - occurred_at
@@ -119,6 +121,7 @@ broadway_sensitive_serializer:
   strategy:
     name: partial
     aggregate_key_auto_creation: true # Enable AggregateKey model auto creation. This is the convenient way, check out the examples and wiki on main library
+    value_serializer: json # Strategy to serialize payload's values. Default json
     events: # List of events supported by the strategy
       - SensitiveUser\User\Domain\Event\AddressAdded:
         - address # List of keys to sensitize
@@ -131,6 +134,7 @@ broadway_sensitive_serializer:
   #  parameters:
   #    partial:
   #      aggregate_key_auto_creation: true
+  #      value_serializer: json
   #      events:
   #        - SensitiveUser\User\Domain\Event\AddressAdded:
   #           - address
@@ -164,10 +168,12 @@ broadway_sensitive_serializer:
   strategy:
     name: custom
     aggregate_key_auto_creation: true # Enable AggregateKey model auto creation. This is the convenient way, check out the examples and wiki on main library
+    value_serializer: json # Strategy to serialize payload's values. Default json
   #--- Alternatively -----
   #strategy:
   #  name: custom
   #  parameters:
   #    custom:
   #      aggregate_key_auto_creation: true
+  #      value_serializer: json
 ```

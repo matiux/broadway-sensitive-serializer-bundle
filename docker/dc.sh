@@ -33,6 +33,7 @@ elif [[ "$1" == "coding-standard-fix" ]]; then shift 1;                 ${DC_EXE
 elif [[ "$1" == "coding-standard-fix-no-pseudo-tty" ]]; then shift 1;   ${DC_EXEC_PHP_NO_PSEUDO_TTY} $PROJECT_TOOL coding-standard-fix "$@"
 elif [[ "$1" == "coding-standard-check-staged" ]]; then shift 1;        ${DC_EXEC_PHP_NO_PSEUDO_TTY} $PROJECT_TOOL coding-standard-check-staged
 elif [[ "$1" == "coding-standard-fix-staged" ]]; then shift 1;          ${DC_EXEC_PHP_NO_PSEUDO_TTY} $PROJECT_TOOL coding-standard-fix-staged
+elif [[ "$1" == "coding-standard-fix-all" ]]; then shift 1;             ${DC_EXEC_PHP_NO_PSEUDO_TTY} $PROJECT_TOOL coding-standard-fix-all
 elif [[ "$1" == "phpunit" ]]; then shift 1;                             ${DC_EXEC_PHP_NO_PSEUDO_TTY} $PROJECT_TOOL coverage
 elif [[ "$1" == "psalm" ]]; then shift 1;                               ${DC_EXEC_PHP_NO_PSEUDO_TTY} $PROJECT_TOOL psalm "$@"
 elif [[ "$1" == "psalm-no-pseudo-tty" ]]; then shift 1;                 ${DC_EXEC_PHP_NO_PSEUDO_TTY} $PROJECT_TOOL psalm "$@"
