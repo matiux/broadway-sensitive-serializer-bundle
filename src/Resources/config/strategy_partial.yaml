@@ -2,11 +2,9 @@ services:
 
   broadway_sensitive_serializer.strategy.partial.sensitizer:
     class: Matiux\Broadway\SensitiveSerializer\Serializer\Strategy\PartialStrategy\PartialPayloadSensitizer
+    parent:   Matiux\Broadway\SensitiveSerializer\Serializer\Strategy\PayloadSensitizer
     arguments:
-      $sensitiveDataManager: '@broadway_sensitive_serializer.data_manager'
-      $aggregateKeyManager: '@broadway_sensitive_serializer.aggregate_key_manager'
       $partialPayloadSensitizerRegistry: '@broadway_sensitive_serializer.strategy.partial.registry'
-      $automaticAggregateKeyCreation: '%matiux.broadway.sensitive_serializer.strategy.aggregate_key_auto_creation%'
 
   broadway_sensitive_serializer.strategy.partial:
     class: Matiux\Broadway\SensitiveSerializer\Serializer\Strategy\PartialStrategy\PartialStrategy
