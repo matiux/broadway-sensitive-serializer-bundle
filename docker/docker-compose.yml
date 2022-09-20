@@ -1,20 +1,21 @@
 version: '3.9'
 
 networks:
-  sensitive_serializer_bundle_network:
-    name: sensitive_serializer_bundle_network
+  broadway-sensitive-serializer-bundle-network:
+    name: broadway-sensitive-serializer-bundle-network
     driver: bridge
 
 services:
 
-  php_broadway_sensitive_serializer_bundle:
+  broadway-sensitive-serializer-bundle-php:
+    image: broadway-sensitive-serializer-bundle-php
     build: php
     hostname: sensitive_serializer_bundle
     volumes:
       - ../:/var/www/app:delegated
       - ./data/shell_history:/home/utente/shell_history
     networks:
-      - sensitive_serializer_bundle_network
+      - broadway-sensitive-serializer-bundle-network
     environment:
       - HISTFILE=/home/utente/shell_history/.x_history
     secrets:
@@ -25,11 +26,11 @@ services:
       - source: known_hosts
         target: /home/utente/.ssh/known_hosts
 
-  nodejs:
+  broadway-sensitive-serializer-bundle-nodejs:
+    image: broadway-sensitive-serializer-bundle-nodejs
     build: nodejs
     working_dir: /var/www/app
-    #command: "commitlint -e --from=HEAD"
     volumes:
       - ../:/var/www/app
     networks:
-      - sensitive_serializer_bundle_network
+      - broadway-sensitive-serializer-bundle-network

@@ -5,9 +5,9 @@ declare(strict_types=1);
 $finder = PhpCsFixer\Finder::create()
     ->in([
         realpath(__DIR__.'/../../src'),
-        realpath(__DIR__.'/../../tests')
+        realpath(__DIR__.'/../../tests'),
     ])
-    //->exclude(['dir'])
+    // ->exclude(['dir'])
     ->notPath('DependencyInjection/Configuration.php');
 
 $config = new PhpCsFixer\Config();

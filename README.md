@@ -19,33 +19,18 @@ git clone https://github.com/matiux/broadway-sensitive-serializer-bundle.git && 
 cp docker/docker-compose.override.dist.yml docker/docker-compose.override.yml
 rm -rf .git/hooks && ln -s ../scripts/git-hooks .git/hooks
 ```
-
-### Interact with the PHP container
-This is a bash script that wrap major docker-compose function. You can find it [here](./docker/dc.sh) and there is a symbolic link in project root.
-
-Some uses:
-```shell
-./dc up -d
-./dc enter
-./dc phpunit
-./dc psalm
-./dc coding-standard-fix-staged
-./dc build php --no-cache
-```
-Check out [here](./docker/dc.sh) for all the options.
-
 ### Install dependencies to run test or execute examples
 ```shell
-./dc up -d
-./dc enter
-composer install
+make build-php ARG="--no-cache"
+make upd
+make composer ARG="install"
 ```
 
 ### Run test
 ```shell
-./dc up -d
-./dc enter
-project phpunit
+make build-php ARG="--no-cache"
+make upd
+make phpunit
 ```
 
 ### Whole Strategy configuration
