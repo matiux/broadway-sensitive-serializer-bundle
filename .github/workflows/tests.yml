@@ -29,13 +29,13 @@ jobs:
         run: composer install --prefer-dist --no-progress
 
       - name: Create Schema
-        run: ./tools/bin/project schema-create
+        run: ./tools/bin/project/project schema-create
 
       - name: "Run unit tests (PHPUnit)"
         env:
           XDEBUG_MODE: coverage
 
-        run: ./tools/bin/project coverage
+        run: ./tools/bin/project/project coverage
 
       - name: Upload coverage to Codecov
         uses: codecov/codecov-action@v2
